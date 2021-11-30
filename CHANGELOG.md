@@ -1,5 +1,8 @@
 # Changelog
 
+## _(in-progress)_
+* Change: Note compatibility through WP 5.8+
+
 ## 2.0.1 _(2021-05-30)_
 
 ### Highlights:
