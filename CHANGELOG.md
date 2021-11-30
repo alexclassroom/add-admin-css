@@ -2,6 +2,12 @@
 
 ## _(in-progress)_
 * Change: Note compatibility through WP 5.8+
+* Change: Update plugin framework to 064
+    * 064:
+    * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
+    * Fix: Fix URL for plugin listing donate link
+    * Change: Store donation URL as object variable
+    * Change: Update strings used for settings page donation link
 * Change: Tweak installation instruction
 
 ## 2.0.1 _(2021-05-30)_

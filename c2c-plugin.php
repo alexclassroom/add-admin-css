@@ -2,7 +2,7 @@
 /**
  * @package C2C_Plugin
  * @author  Scott Reilly
- * @version 063
+ * @version 064
  */
 /*
 Basis for other plugins.
@@ -31,9 +31,9 @@ Compatible with WordPress 4.9 through 5.7+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_Plugin_063' ) ) :
+if ( ! class_exists( 'c2c_Plugin_064' ) ) :
 
-abstract class c2c_Plugin_063 {
+abstract class c2c_Plugin_064 {
 	protected $plugin_css_version = '009';
 	protected $options            = array();
 	protected $options_from_db    = '';
@@ -48,12 +48,14 @@ abstract class c2c_Plugin_063 {
 		'input'            => '',
 		'input_attributes' => '',
 		'label'            => '',
+		'more_help'        => '',
 		'no_wrap'          => false,
 		'numbered'         => false,
 		'options'          => '',
 		'output'           => '', // likely deprecated
 		'required'         => false
 	);
+	protected $donation_url       = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522';
 	protected $saved_settings     = false;
 	protected $saved_settings_msg = '';
 
@@ -65,7 +67,7 @@ abstract class c2c_Plugin_063 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '063';
+		return '064';
 	}
 
 	/**
@@ -750,10 +752,8 @@ HTML;
 	 */
 	public function donate_link( $links, $file ) {
 		if ( $file == $this->plugin_basename ) {
-			$donation_url  = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522';
-			$donation_url .= urlencode( "Donation for coffee2code plugin: {$this->name}" );
 			$title         = $this->get_c2c_string( 'Coffee fuels my coding.' );
-			$links[] = '<a href="' . esc_url( $donation_url ) . '" title="' . esc_attr( $title ) . '">' . $this->get_c2c_string( 'Donate' ) . '</a>';
+			$links[] = '<a href="' . esc_url( $this->donation_url ) . '" title="' . esc_attr( $title ) . '">' . $this->get_c2c_string( 'Donate' ) . '</a>';
 		}
 		return $links;
 	}
@@ -1031,15 +1031,18 @@ HTML;
 			echo '</fieldset>';
 		} elseif ( $input == 'checkbox' ) {
 			echo "<input type='{$input}' {$attribs} value='1' " . checked( $value, 1, false ) . " />\n";
+			if ( ! empty( $this->config[ $opt ]['help'] ) ) {
+				printf( "<label class='description' for='%s'>%s</label>\n", $opt, $this->config[ $opt ]['help'] );
+				$this->config[ $opt ]['help'] = '';
+			}
 		} else { // Only 'text' and 'password' should fall through to here.
 			echo "<input type='{$input}' {$attribs} value='" . esc_attr( $value ) . "' />\n";
 		}
-		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt ) ) {
-			if ( 'checkbox' === $input ) {
-				echo "<label class='description' for='{$opt}'>{$help}</label>\n";
-			} else {
-				echo "<p class='description'>{$help}</p>\n";
-			}
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt, 'help' ) ) {
+			echo "<p class='description'>{$help}</p>\n";
+		}
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['more_help'], $opt, 'more_help' ) ) {
+			echo "<p class='description'>{$help}</p>\n";
 		}
 
 		do_action( $this->get_hook( 'post_display_option' ), $opt );
@@ -1078,9 +1081,9 @@ HTML;
 		);
 		printf(
 			'<span><a href="%1$s" title="%2$s">%3$s</span>',
-			esc_url( 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522' ),
-			esc_attr( $this->get_c2c_string( 'Please consider a donation' ) ),
-			$this->get_c2c_string( 'Did you find this plugin useful?' )
+			esc_url( $this->donation_url ),
+			esc_attr( $this->get_c2c_string( "Thanks for the consideration; it's much appreciated." ) ),
+			$this->get_c2c_string( 'If this plugin has been useful to you, please consider a donation.' )
 		);
 		echo "</div>\n";
 
