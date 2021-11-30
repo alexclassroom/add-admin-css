@@ -79,60 +79,14 @@ Yes.
 1. A screenshot of the plugin's admin settings page.
 
 
-== Hooks ==
+== Developer Documentation ==
 
-The plugin exposes two filters for hooking. Typically, code making use of filters should ideally be put into a mu-plugin or site-specific plugin (which is beyond the scope of this readme to explain). Bear in mind that the features controlled by these filters are also configurable via the plugin's settings page. These filters are likely only of interest to advanced users able to code.
+Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/coffee2code/add-admin-css/blob/master/DEVELOPER-DOCS.md). That documentation covers the hooks provided by the plugin.
 
-**c2c_add_admin_css (filter)**
+As an overview, these are the hooks provided by the plugin:
 
-The 'c2c_add_admin_css' filter allows customization of CSS that should be added directly to the admin page head.
-
-Arguments:
-
-* $css (string): CSS styles.
-
-Example:
-
-`
-/**
- * Add CSS to admin pages.
- *
- * @param string $css String to be added to admin pages.
- * @return string
- */
-function my_admin_css( $css ) {
-	$css .= "
-		#site-heading a span { color:blue !important; }
-		#favorite-actions { display:none; }
-	";
-	return $css;
-}
-add_filter( 'c2c_add_admin_css', 'my_admin_css' );
-`
-
-**c2c_add_admin_css_files (filter)**
-
-The 'c2c_add_admin_css_files' filter allows programmatic modification of the list of CSS files to enqueue in the admin.
-
-Arguments:
-
-* $files (array): Array of CSS files.
-
-Example:
-
-`
-/**
- * Add CSS file(s) to admin pages.
- *
- * @param array $files CSS files to be added to admin pages.
- * @return array
- */
-function my_admin_css_files( $files ) {
-	$files[] = 'http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css';
-	return $files;
-}
-add_filter( 'c2c_add_admin_css_files', 'my_admin_css_files' );
-`
+* `c2c_add_admin_css`       : Filter to customize the CSS that should be added directly to the admin page head.
+* `c2c_add_admin_css_files` : Filter to customize the list of CSS files to enqueue in the admin.
 
 
 == Changelog ==
