@@ -2,6 +2,7 @@
 
 ## _(in-progress)_
 * Change: Note compatibility through WP 5.8+
+* Change: Tweak installation instruction
 
 ## 2.0.1 _(2021-05-30)_
 
