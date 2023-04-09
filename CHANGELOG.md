@@ -6,6 +6,8 @@
 * Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 065
+    * _(in-progress)_:
+    * Change: Add styles for nested lists within settings descriptions
     * 065:
     * New: Add support for 'inline_help' setting configuration option
     * New: Add support for 'raw_help' setting configuration option

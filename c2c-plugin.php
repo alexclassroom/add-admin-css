@@ -684,6 +684,7 @@ abstract class c2c_Plugin_065 {
 		input:disabled.c2c-short_text, input:disabled.c2c-long_text, input:disabled.c2c-text {border: 2px solid #ddd;box-shadow: none;}
 		ul.description, ol.description {color:#646970;margin:10px 0;list-style:disc;}
 		ul.description li, ol.description li {margin-left:1rem;}
+		ul.description ul, ul.description ol, ol.description ul, ol.description ol {list-style:circle;margin-top:0.4rem;}
 		</style>
 
 HTML;
