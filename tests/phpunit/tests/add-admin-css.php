@@ -316,14 +316,29 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		$this->test_turn_on_admin();
 
-		$this->assertContains( $link, $this->get_action_output() );
+		$output = $this->get_action_output();
+
+		$this->assertContains( "<link rel='stylesheet'", $output );
+		$this->assertContains( $link, $output );
+	}
+
+	public function test_empty_array_via_filter_does_not_add_link() {
+		$this->set_option();
+		add_filter( 'c2c_add_admin_css_files', '__return_empty_array' );
+
+		$this->test_turn_on_admin();
+
+		$this->assertNotContains( "<link rel='stylesheet'", $this->get_action_output() );
 	}
 
 	public function test_css_is_added_to_admin_head() {
 		$this->set_option();
 		$this->test_turn_on_admin();
 
-		$this->assertContains( $this->add_css( '', '22' ), $this->get_action_output() );
+		$output = $this->get_action_output();
+
+		$this->assertContains( '<style>', $output );
+		$this->assertContains( $this->add_css( '', '22' ), $output );
 	}
 
 	public function test_css_added_via_filter_is_added_to_admin_head() {
@@ -332,7 +347,19 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		add_filter( 'c2c_add_admin_css', array( $this, 'add_css' ) );
 
-		$this->assertContains( $this->add_css( '' ), $this->get_action_output() );
+		$output = $this->get_action_output();
+
+		$this->assertContains( '<style>', $output );
+		$this->assertContains( $this->add_css( '' ), $output );
+	}
+
+	public function test_empty_string_via_filter_does_not_add_css() {
+		$this->set_option();
+		$this->test_turn_on_admin();
+
+		add_filter( 'c2c_add_admin_css', '__return_empty_string' );
+
+		$this->assertNotContains( '<style>', $this->get_action_output() );
 	}
 
 	public function test_add_css_to_head_with_just_css( $expected = false ) {

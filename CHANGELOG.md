@@ -21,6 +21,7 @@
 * Change: Note compatibility through WP 6.2+
 * Change: Tweak installation instruction
 * Unit tests:
+    * New: Add tests to verify filtered values output nothing when empty
     * New: Add test to check that the appropriate number of framework strings are translatable
     * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
 * Change: Update copyright date (2023)
