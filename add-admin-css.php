@@ -142,7 +142,21 @@ final class c2c_AddAdminCSS extends c2c_Plugin_066 {
 				'default'          => '',
 				'datatype'         => 'array',
 				'label'            => __( 'Admin CSS Files', 'add-admin-css' ),
-				'help'             => __( 'List one file per line. The reference can be relative to the root of your active theme, relative to the root of your site (by prepending file or path with "/"), or a full, absolute URL. These will be output in the order listed above and appear before the CSS defined below.', 'add-admin-css' ),
+				'help'             => __( 'Include CSS defined in files.', 'add-admin-css' ),
+				'raw_help' => '<ul class="description"><li>'
+					. __( 'List one file per line.', 'add-admin-css' )
+					. '</li><li>'
+					. __( 'CSS files can be referenced in a number of ways:', 'add-admin-css' )
+					. '<ul><li>'
+						. __( 'Relative to the root of your active theme (e.g. <code>js/custom.js</code>)', 'add-admin-css' )
+						. '</li><li>'
+						. __( 'Relative to the root of your site (by prepending "/" to the path) (e.g. <code>/wp-content/uploads/custom.js</code>)', 'add-admin-css' )
+						. '</li><li>'
+						. __( 'Full, absolute URL (e.g. <code>https://example.com/js/custom.js</code>)', 'add-admin-css' )
+						. '</li></ul>'
+					. '</li><li>'
+					. __ ('Files will be output in the order listed above and appear before the CSS defined below.', 'add-admin-css' )
+					. '</li></ul>',
 				'input_attributes' => 'rows="4" cols="40"',
 			),
 			'css' => array(
