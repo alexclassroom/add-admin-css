@@ -33,6 +33,31 @@ class c2c_Plugin extends WP_UnitTestCase {
 		return $translation;
 	}
 
+	public function count_function_calls( $filename, $function_name ) {
+		$content = file_get_contents( $filename );
+		$count = 0;
+
+		if ( false === $content ) {
+			new Exception( 'Unable to locate or open file: ' . $filename );
+			return 0;
+		}
+
+		$pattern = '/\b' . preg_quote( $function_name ) . '\(/';
+		preg_match_all( $pattern, $content, $matches );
+
+		if ( isset( $matches[0] ) ) {
+			$count = count( $matches[0] );
+		}
+
+		// Exclude the function declaration.
+		if ( preg_match( '/\bfunction\s+' . preg_quote( $function_name ) . '\(/', $content ) ) {
+			$count--;
+		}
+
+		// TODO: Exclude mentions in comments.
+
+		return $count;
+	}
 
 	//
 	//
@@ -137,8 +162,16 @@ class c2c_Plugin extends WP_UnitTestCase {
 	 * get_c2c_string()
 	 */
 
-	 public function test_get_c2c_string_size() {
-		$this->assertEquals( 24, count( $this->obj->get_c2c_string( '' ) ) );
+	/**
+	 * Ensure that each translatable string is translated by plugin.
+	 *
+	 * This assumes a lot and is quite brittle.
+	 */
+	public function test_get_c2c_string_has_correct_number_of_strings() {
+		$this->assertEquals(
+			$this->count_function_calls( dirname( ADD_ADMIN_CSS_PLUGIN_FILE ) . '/c2c-plugin.php', 'get_c2c_string' ),
+			count( $this->obj->get_c2c_string() )
+		);
 	}
 
 	public function test_get_c2c_string_for_unknown_string() {

@@ -20,7 +20,9 @@
     * Change: Update strings used for settings page donation link
 * Change: Note compatibility through WP 6.2+
 * Change: Tweak installation instruction
-* Change: Unit tests: In bootstrap, add backcompat for PHPUnit pre-v6.0
+* Unit tests:
+    * New: Add test to check that the appropriate number of framework strings are translatable
+    * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
 * Change: Update copyright date (2023)
 
 ## 2.0.1 _(2021-05-30)_
