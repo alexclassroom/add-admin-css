@@ -24,6 +24,7 @@
     * Fix: Fix URL for plugin listing donate link
     * Change: Store donation URL as object variable
     * Change: Update strings used for settings page donation link
+* Change: Update and improve long description and numerous FAQ entries
 * Change: Note compatibility through WP 6.2+
 * Change: Tweak installation instruction
 * Unit tests:

@@ -15,7 +15,7 @@ Easily define additional CSS (inline and/or by URL) to be added to all administr
 
 Ever want to tweak the appearance of the WordPress admin pages by hiding stuff, moving stuff around, changing fonts, colors, sizes, etc? Any modification you may want to do with CSS can easily be done via this plugin.
 
-Using this plugin you'll easily be able to define additional CSS (inline and/or files by URL) to be added to all administration pages. You can define CSS to appear inline in the admin head (within style tags), or reference CSS files to be linked (via "link rel='stylesheet'" tags). The referenced CSS files will appear in the admin head first, listed in the order defined in the plugin's settings. Then any inline CSS are added to the admin head. Both values can be filtered for advanced customization (see Advanced section).
+Using this plugin you'll easily be able to define additional CSS (inline and/or files by URL) to be added to all administration pages. Hooks are provided to customize the output of the CSS, the CSS files, and if/when the CSS should even be output (see Hooks section).
 
 Links: [Plugin Homepage](https://coffee2code.com/wp-plugins/add-admin-css/) | [Plugin Directory Page](https://wordpress.org/plugins/add-admin-css/) | [GitHub](https://github.com/coffee2code/add-admin-css/) | [Author Homepage](https://coffee2code.com)
 
@@ -35,21 +35,23 @@ Yes, via the "Admin CSS Files" input field on the plugin's settings page.
 
 = Can I limit what admin pages the CSS gets output on? =
 
-No, not presently. At least not directly. By default, the CSS is added for every admin page on the site.
+By default, the CSS is added for every admin page on the site and for every user.
 
-However, you can preface your selectors with admin page specific class(es) on the 'body' tag to ensure CSS only applies on certain admin pages. (e.g. `body.index-php h2, #icon-index { display: none; }`).
+One option, if you wish to only use CSS and you want to limit use of CSS to certain admin pages, is to preface your selectors with admin page specific class(es) on the 'body' tag to ensure CSS only applies on certain admin pages. (e.g. `body.edit-php h1 { color: purple; }`).
 
-Or, you can hook the 'c2c_add_admin_css' and 'c2c_add_admin_css_files' filters and determine the current admin page context to decide whether the respective hook argument should be returned (and thus output) or not.
+Otherwise, programmatically you have full control over that behavior via the `'c2c_add_admin_css_disable_css'` filter (see Hooks section). You'd hook that filter, determine the context, and decide if the CSS should be output or not. You could check what page is being loaded and/or who is the current user.
 
 = Can I limit what users the CSS applies to? =
 
-No, not presently. At least not directly. By default, the CSS is added for any user that can enter the admin section of the site.
+By default, the CSS is added for every admin page on the site and for every user.
 
-You can hook the 'c2c_add_admin_css' and 'c2c_add_admin_css_files' filters and determine the current user to decide whether the respective hook argument should be returned (and thus output) for the user or not.
+Programmatically you have full control over that behavior via the `'c2c_add_admin_css_disable_css'` filter (see Hooks section). You'd hook that filter, determine the context, and decide if the CSS should be output or not. You could check who is the current user and/or what page is being loaded.
+
+There is currently no way to do this purely with CSS or through any other setting provided by the plugin.
 
 = How can I edit the plugin's settings in the event I supplied CSS that prevents the admin pages from properly functioning or being seen? =
 
-It is certainly possible that you can put yourself in an unfortunate position by supplying CSS that could hide critical parts of admin pages, making it seeminly impossible to fix or revert your changes. Fortunately, there are a number of approaches you can take to correct the problem.
+It is certainly possible that you can put yourself in an unfortunate position by supplying CSS that could hide critical parts of admin pages, making it seemingly impossible to fix or revert your changes. Fortunately, there are a number of approaches you can take to correct the problem.
 
 The recommended approach is to visit the URL for the plugin's settings page, but appended with a special query parameter to disable the output of its CSS. The plugin's settings page would typically be at a URL like `https://example.com/wp-admin/themes.php?page=add-admin-css%2Fadd-admin-css.php`. Append `&c2c-no-css=1` to that, so that the URL is `https://example.com/wp-admin/themes.php?page=add-admin-css%2Fadd-admin-css.php&c2c-no-css=1` (obviously change example.com with the domain name for your site).
 
@@ -88,6 +90,7 @@ As an overview, these are the hooks provided by the plugin:
 * `c2c_add_admin_css`             : Filter to customize the CSS that should be added directly to the admin page head.
 * `c2c_add_admin_css_files`       : Filter to customize the list of CSS files to enqueue in the admin.
 * `c2c_add_admin_css_disable_css` : Filter to customize if the CSS defined via this plugin should be output or not.
+
 
 == Changelog ==
 
