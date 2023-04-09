@@ -2,13 +2,23 @@
 
 ## _(in-progress)_
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
-* Change: Note compatibility through WP 6.2+
-* Change: Update plugin framework to 064
+* Change: Update plugin framework to 065
+    * 065:
+    * New: Add support for 'inline_help' setting configuration option
+    * New: Add support for 'raw_help' setting configuration option
+    * New: Add support for use of lists within settings descriptions
+    * Change: Add an 'id' attribute to settings form
+    * Change: Add styles for disabled input text fields and inline setting help notices
+    * Change: Support 'number' input by assigning 'small-text' class
+    * Change: Tweak styling for settings page footer
+    * Change: Note compatibility through WP 6.2+
+    * Change: Update copyright date (2023)
     * 064:
     * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
     * Fix: Fix URL for plugin listing donate link
     * Change: Store donation URL as object variable
     * Change: Update strings used for settings page donation link
+* Change: Note compatibility through WP 6.2+
 * Change: Tweak installation instruction
 * Change: Unit tests: In bootstrap, add backcompat for PHPUnit pre-v6.0
 * Change: Update copyright date (2023)

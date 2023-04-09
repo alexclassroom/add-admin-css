@@ -2,17 +2,17 @@
 /**
  * @package C2C_Plugin
  * @author  Scott Reilly
- * @version 064
+ * @version 065
  */
 /*
 Basis for other plugins.
 
-Compatible with WordPress 4.9 through 5.7+.
+Compatible with WordPress 4.9 through 6.2+.
 
 */
 
 /*
-	Copyright (c) 2010-2021 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2010-2023 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -31,9 +31,9 @@ Compatible with WordPress 4.9 through 5.7+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_Plugin_064' ) ) :
+if ( ! class_exists( 'c2c_Plugin_065' ) ) :
 
-abstract class c2c_Plugin_064 {
+abstract class c2c_Plugin_065 {
 	protected $plugin_css_version = '009';
 	protected $options            = array();
 	protected $options_from_db    = '';
@@ -45,6 +45,7 @@ abstract class c2c_Plugin_064 {
 		'datatype'         => '',
 		'default'          => '',
 		'help'             => '',
+		'inline_help'      => '',
 		'input'            => '',
 		'input_attributes' => '',
 		'label'            => '',
@@ -53,6 +54,7 @@ abstract class c2c_Plugin_064 {
 		'numbered'         => false,
 		'options'          => '',
 		'output'           => '', // likely deprecated
+		'raw_help'         => '',
 		'required'         => false
 	);
 	protected $donation_url       = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6ARCFJ9TX3522';
@@ -67,7 +69,7 @@ abstract class c2c_Plugin_064 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '064';
+		return '065';
 	}
 
 	/**
@@ -646,10 +648,10 @@ abstract class c2c_Plugin_064 {
 		.long-text {width:98% !important;}
 		#c2c {
 			text-align:center;
-			color:#888;
+			color:#777;
 			background-color:#ffffef;
-			padding:5px 0 0;
-			margin-top:12px;
+			padding:1rem 0;
+			margin-top:4rem;
 			border-style:solid;
 			border-color:#dadada;
 			border-width:1px 0;
@@ -660,11 +662,13 @@ abstract class c2c_Plugin_064 {
 			padding:5px 40px 0 0;
 			width:45%;
 			min-height:40px;
-			background:url('$logo') no-repeat top right;
+			background:url('$logo') no-repeat center right;
+			font-size:larger;
 		}
 		#c2c span {
 			display:block;
-			font-size:x-small;
+			font-size:smaller;
+			margin-top:0.5rem;
 		}
 		.form-table {margin-bottom:20px;}
 		.c2c-plugin-list {margin-left:2em;}
@@ -674,7 +678,12 @@ abstract class c2c_Plugin_064 {
 		.c2c-fieldset {border:1px solid #ccc; padding:2px 8px;}
 		.c2c-textarea, .c2c-inline_textarea {width:98%;font-family:"Courier New", Courier, mono; display: block; white-space: pre; word-wrap: normal; overflow-x: scroll;}
 		.see-help {font-size:x-small;font-style:italic;}
+		.inline-description {display:inline-block;}
 		.more-help {display:block;margin-top:8px;}
+		.wrap .c2c-notice-inline {margin-bottom:0;margin-top:1rem;width:fit-content;}
+		input:disabled.c2c-short_text, input:disabled.c2c-long_text, input:disabled.c2c-text {border: 2px solid #ddd;box-shadow: none;}
+		ul.description, ol.description {color:#646970;margin:10px 0;list-style:disc;}
+		ul.description li, ol.description li {margin-left:1rem;}
 		</style>
 
 HTML;
@@ -998,6 +1007,9 @@ HTML;
 			}
 			$input = 'text';
 		}
+		elseif ( 'number' === $input ) {
+			$this->config[ $opt ]['class'][] = 'small-text';
+		}
 		$class = implode( ' ', $this->config[ $opt ]['class'] );
 		$attribs = "name='{$popt}' id='{$opt}' class='{$class}' {$attributes}";
 		if ( $input == '' ) {
@@ -1038,11 +1050,21 @@ HTML;
 		} else { // Only 'text' and 'password' should fall through to here.
 			echo "<input type='{$input}' {$attribs} value='" . esc_attr( $value ) . "' />\n";
 		}
+		// Help intended to be inline (usually with a text field; checkboxes naturally have their help inline)
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['inline_help'], $opt, 'inline_help' ) ) {
+			echo "<p class='description inline-description'>{$help}</p>\n";
+		}
+		// Help intended to be shown below an input field.
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt, 'help' ) ) {
 			echo "<p class='description'>{$help}</p>\n";
 		}
+		// Additional paragraph of help intended to follow the main 'help'.
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['more_help'], $opt, 'more_help' ) ) {
 			echo "<p class='description'>{$help}</p>\n";
+		}
+		// Additional help of custom markup (block elements that wouldn't fit into the default help paragraph markup).
+		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['raw_help'], $opt, 'raw_help' ) ) {
+			echo $help . "\n";
 		}
 
 		do_action( $this->get_hook( 'post_display_option' ), $opt );
@@ -1063,7 +1085,11 @@ HTML;
 
 		do_action( $this->get_hook( 'before_settings_form' ), $this );
 
-		echo "<form action='" . admin_url( 'options.php' ) . "' method='post' class='c2c-form'>\n";
+		printf(
+			'<form action="%s" method="post" id="%s" class="c2c-form">' . "\n",
+			esc_url( admin_url( 'options.php' ) ),
+			esc_attr( 'settings-' . $this->id_base )
+		);
 
 		settings_fields( $this->admin_options_name );
 		do_settings_sections( $this->plugin_file );

@@ -71,6 +71,18 @@ class c2c_Plugin extends WP_UnitTestCase {
 	//
 
 
+	public function test_plugin_framework_class_name() {
+		$this->assertTrue( class_exists( 'c2c_Plugin_065' ) );
+	}
+
+	/*
+	 * c2c_plugin_version()
+	 */
+
+	public function test_plugin_framework_version() {
+		$this->assertEquals( '065', $this->obj->c2c_plugin_version() );
+	}
+
 	/*
 	 * __clone()
 	 */
