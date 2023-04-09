@@ -11,6 +11,7 @@
     * Change: Update strings used for settings page donation link
 * Change: Tweak installation instruction
 * Change: Unit tests: In bootstrap, add backcompat for PHPUnit pre-v6.0
+* Change: Update copyright date (2023)
 
 ## 2.0.1 _(2021-05-30)_
 
