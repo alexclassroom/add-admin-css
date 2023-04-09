@@ -366,8 +366,8 @@ HTML;
 			return;
 		}
 
-		// Bail if CSS can be output.
-		if ( $this->can_show_css() ) {
+		// Bail if recovery mode is not enabled.
+		if ( ! $this->is_recovery_mode_enabled() ) {
 			return;
 		}
 
