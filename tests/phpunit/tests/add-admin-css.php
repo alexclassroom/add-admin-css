@@ -462,6 +462,32 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	}
 
 	/*
+	 * is_recovery_mode_enabled()
+	 */
+
+	public function test_is_recovery_mode_enabled_default() {
+		$this->test_turn_on_admin();
+
+		$this->assertFalse( $this->obj->is_recovery_mode_enabled() );
+	}
+
+	public function test_is_recovery_mode_enabled_with_query_param_false() {
+		$this->test_turn_on_admin();
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '0';
+
+		$this->assertFalse( $this->obj->is_recovery_mode_enabled() );
+	}
+
+	public function test_is_recovery_mode_enabled_with_query_param_true() {
+		$this->test_turn_on_admin();
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
+
+		$this->assertTrue( $this->obj->is_recovery_mode_enabled() );
+	}
+
+	/*
 	 * can_show_css()
 	 */
 
@@ -581,6 +607,22 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		define( 'C2C_ADD_ADMIN_CSS_DISABLED', true );
 
 		$this->assertFalse( $this->obj->can_show_css() );
+	}
+
+	public function test_is_recovery_mode_enabled_with_constant() {
+		$this->test_turn_on_admin();
+
+		$this->assertTrue( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED );
+		$this->assertTrue( $this->obj->is_recovery_mode_enabled() );
+	}
+
+	public function test_is_recovery_mode_enabled_constant_precendence_over_query_param() {
+		$this->test_turn_on_admin();
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '0';
+
+		$this->assertTrue( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED );
+		$this->assertTrue( $this->obj->is_recovery_mode_enabled() );
 	}
 
 	public function test_recovery_mode_via_constant_disables_add_css() {

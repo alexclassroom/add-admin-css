@@ -476,28 +476,43 @@ HTML;
 	}
 
 	/**
+	 * Determines if recovery mode is currently enabled.
+	 *
+	 * Recovery mode is enabled in one of two ways:
+	 * - C2C_ADD_ADMIN_CSS_DISABLED constant is defined and true.
+	 * - 'c2c-no-css' query parameter is present with a value of '1'.
+	 *
+	 * @since 2.1
+	 *
+	 * @return bool True if recovery mode is enabled, else false.
+	 */
+	public function is_recovery_mode_enabled() {
+		$enabled = false;
+
+		// Recovery mode is enabled via constant.
+		if ( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED ) {
+			$enabled = true;
+		}
+		// Recovery mode is enabled via query parameter.
+		elseif ( isset( $_GET[ self::NO_CSS_QUERY_PARAM ] ) && '1' === $_GET[ self::NO_CSS_QUERY_PARAM ] ) {
+			$enabled = true;
+		}
+
+		return $enabled;
+	}
+
+	/**
 	 * Determines if CSS can be output under current conditions.
 	 *
 	 * CSS will always be output in the admin unless:
-	 * - The C2C_ADD_ADMIN_CSS_DISABLED constant is defined and true.
-	 * - The 'c2c-no-css' query parameter is present with a value of '1'.
+	 * - Recovery mode is enabled.
 	 *
 	 * @since 1.7
 	 *
 	 * @return bool True if CSS can be shown, otherwise false.
 	 */
 	public function can_show_css() {
-		$can_show = true;
-
-		// Recovery mode enabled via constant.
-		if ( $can_show && defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED ) {
-			$can_show = false;
-		}
-
-		// Recovery mode enabled via query parameter.
-		if ( $can_show && isset( $_GET[ self::NO_CSS_QUERY_PARAM ] ) && '1' === $_GET[ self::NO_CSS_QUERY_PARAM ] ) {
-			$can_show = false;
-		}
+		$can_show = ! $this->is_recovery_mode_enabled();
 
 		return $can_show;
 	}
