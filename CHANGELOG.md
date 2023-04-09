@@ -2,7 +2,7 @@
 
 ## _(in-progress)_
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
-* Change: Note compatibility through WP 5.8+
+* Change: Note compatibility through WP 6.2+
 * Change: Update plugin framework to 064
     * 064:
     * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
