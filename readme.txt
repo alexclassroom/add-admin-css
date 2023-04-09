@@ -85,9 +85,9 @@ Developer documentation can be found in [DEVELOPER-DOCS.md](https://github.com/c
 
 As an overview, these are the hooks provided by the plugin:
 
-* `c2c_add_admin_css`       : Filter to customize the CSS that should be added directly to the admin page head.
-* `c2c_add_admin_css_files` : Filter to customize the list of CSS files to enqueue in the admin.
-
+* `c2c_add_admin_css`             : Filter to customize the CSS that should be added directly to the admin page head.
+* `c2c_add_admin_css_files`       : Filter to customize the list of CSS files to enqueue in the admin.
+* `c2c_add_admin_css_disable_css` : Filter to customize if the CSS defined via this plugin should be output or not.
 
 == Changelog ==
 

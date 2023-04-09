@@ -352,6 +352,20 @@ add_filter( 'c2c_add_admin_css_files', 'my_admin_css_files' );</code></pre>
 
 HTML;
 
+		$help .= '<p>' . __( 'You can also programmatically override whether the CSS defined via this plugin should be output or not with the <code>c2c_add_admin_css_disable_css</code> filter, like so:', 'add-admin-css' ) . '</p>';
+
+		$help .= <<<HTML
+<pre><code>function my_limit_add_admin_css_to_admins( \$disable ) {
+	// If the user isn't an admin, don't output the CSS from Add Admin CSS.
+	if ( ! current_user_can( 'manage_options' ) ) {
+		\$disable = true;
+	}
+	return \$disable;
+}
+</code></pre>
+
+HTML;
+
 		return $help;
 	}
 
@@ -506,6 +520,7 @@ HTML;
 	 *
 	 * CSS will always be output in the admin unless:
 	 * - Recovery mode is enabled.
+	 * - The filter 'c2c_add_admin_css_show_css' return false.
 	 *
 	 * @since 1.7
 	 *
@@ -513,6 +528,15 @@ HTML;
 	 */
 	public function can_show_css() {
 		$can_show = ! $this->is_recovery_mode_enabled();
+
+		if ( $can_show ) {
+			/**
+			 * Filters if output of CSS (both inline and via file reference) should be disabled.
+			 *
+			 * @param $show_css bool True if CSS output should be disabled, else false.
+			 */
+			$can_show = ! (bool) apply_filters( 'c2c_add_admin_css_disable_css', false );
+		}
 
 		return $can_show;
 	}

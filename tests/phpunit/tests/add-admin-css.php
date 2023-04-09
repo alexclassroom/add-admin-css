@@ -510,6 +510,49 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	}
 
 	/*
+	 * filter: c2c_add_admin_css_disable_css
+	 */
+
+	public function test_filter_c2c_add_admin_css_disable_css_when_false() {
+		$this->test_turn_on_admin();
+
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_false' );
+
+		$this->assertTrue( $this->obj->can_show_css() );
+	}
+
+	public function test_filter_c2c_add_admin_css_disable_css_when_true() {
+		$this->test_turn_on_admin();
+
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_true' );
+
+		$this->assertFalse( $this->obj->can_show_css() );
+	}
+
+	public function test_filter_c2c_add_admin_css_disable_css_when_non_bool() {
+		$this->test_turn_on_admin();
+
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_empty_array' );
+		$this->assertTrue( $this->obj->can_show_css() );
+
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_empty_string' );
+		$this->assertTrue( $this->obj->can_show_css() );
+
+		add_filter( 'c2c_add_admin_css_disable_css', function ( $can ) { return 'nonsense'; } );
+		$this->assertFalse( $this->obj->can_show_css() );
+	}
+
+	public function test_filter_c2c_add_admin_css_disable_css_does_not_supercede_recovery_mode() {
+		$this->test_turn_on_admin();
+
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_true' );
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
+
+		$this->assertFalse( $this->obj->can_show_css() );
+	}
+
+	/*
 	 * recovery_mode_notice()
 	 */
 
@@ -522,6 +565,13 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	}
 
 	public function test_recovery_mode_notice_when_css_not_disabled() {
+		$this->fake_current_screen();
+
+		$this->assertEmpty( $this->get_action_output( 'admin_notices' ) );
+	}
+
+	public function test_recovery_mode_notice_when_filter_c2c_add_admin_css_disable_css_is_true() {
+		add_filter( 'c2c_add_admin_css_disable_css', '__return_true' );
 		$this->fake_current_screen();
 
 		$this->assertEmpty( $this->get_action_output( 'admin_notices' ) );

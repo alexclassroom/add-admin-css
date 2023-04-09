@@ -58,3 +58,30 @@ function my_admin_css_files( $files ) {
 }
 add_filter( 'c2c_add_admin_css_files', 'my_admin_css_files' );
 ```
+
+### `c2c_add_admin_css_disable_css` _(filter)_
+
+The `c2c_add_admin_css_disable_css` filter allows programmatic determination of whether the CSS defined via this plugin should be output or not.
+
+#### Arguments
+
+* `$disable` _(bool)_ :
+Whether or not CSS defined via this plugin should be output or not. True if output should be disabled, else false.
+
+#### Example
+
+```php
+/**
+ * Only output CSS from Add Admin CSS for admins.
+ *
+ * @param bool $disable Should CSS output be disabled?
+ * @return bool
+ */
+function my_limit_add_admin_css_to_admins( $disable ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		$disable = true;
+	}
+	return $disable;
+}
+add_filter( 'c2c_add_admin_css_disable_css', 'my_limit_add_admin_css_to_admins' );
+```
