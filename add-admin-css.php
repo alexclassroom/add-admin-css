@@ -521,8 +521,8 @@ HTML;
 		if ( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED ) {
 			$enabled = true;
 		}
-		// Recovery mode is enabled via query parameter.
-		elseif ( isset( $_GET[ self::NO_CSS_QUERY_PARAM ] ) && '1' === $_GET[ self::NO_CSS_QUERY_PARAM ] ) {
+		// Recovery mode is enabled via query parameter and user can change settings.
+		elseif ( isset( $_GET[ self::NO_CSS_QUERY_PARAM ] ) && '1' === $_GET[ self::NO_CSS_QUERY_PARAM ] && current_user_can( 'manage_options' ) ) {
 			$enabled = true;
 		}
 

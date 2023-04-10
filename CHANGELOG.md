@@ -3,6 +3,7 @@
 ## _(in-progress)_
 * New: Add `c2c_add_admin_css_disable_css` filter to override if CSS defined via this plugin should be output or not
 * New: Add `is_recovery_mode_enabled()` to determine is recovery mode is enabled
+* Change: Only support query parameter method of enabling recovery mode if current user can configure plugin settings
 * Change: Display the files setting help text as a list rather than a paragraph
 * Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
