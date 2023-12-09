@@ -29,6 +29,7 @@
 * Change: Update and improve long description and numerous FAQ entries
 * Change: Note compatibility through WP 6.2+
 * Change: Tweak installation instruction
+* New: Add `.gitignore` file
 * Unit tests:
     * New: Add tests to verify filtered values output nothing when empty
     * New: Add test to check that the appropriate number of framework strings are translatable
