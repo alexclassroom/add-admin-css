@@ -401,11 +401,11 @@ HTML;
 
 		if ( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED ) {
 			$msg = sprintf(
-				__( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for this plugin is currently disabled for the entire admin area via use of the <code>%s</code> constant.", 'add-admin-css' ),
+				__( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for the Add Admin CSS plugin is currently disabled for the entire admin area via use of the <code>%s</code> constant.", 'add-admin-css' ),
 				'C2C_ADD_ADMIN_CSS_DISABLED'
 			);
 		} else {
-			$msg = __( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for this plugin is disabled on this page view.", 'add-admin-css' );
+			$msg = __( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for the Add Admin CSS plugin is disabled on this page view.", 'add-admin-css' );
 		}
 
 		echo <<<HTML

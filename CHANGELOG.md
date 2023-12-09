@@ -6,6 +6,7 @@
 * Change: Only support query parameter method of enabling recovery mode if current user can configure plugin settings
 * Change: Display the files setting help text as a list rather than a paragraph
 * Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
+* Change: Explicitly state the plugin name in the recovery mode admin notice to avoid ambiguity
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 066
     * 066:
