@@ -541,13 +541,16 @@ HTML;
 	 * @return bool True if CSS can be shown, otherwise false.
 	 */
 	public function can_show_css() {
+		// If recovery mode is enabled it can't be disabled via the filter.
 		$can_show = ! $this->is_recovery_mode_enabled();
 
 		if ( $can_show ) {
 			/**
 			 * Filters if output of CSS (both inline and via file reference) should be disabled.
 			 *
-			 * @param $show_css bool True if CSS output should be disabled, else false.
+			 * @since 2.1
+			 *
+			 * @param $show_css bool True if CSS output should be disabled, else false. Default false.
 			 */
 			$can_show = ! (bool) apply_filters( 'c2c_add_admin_css_disable_css', false );
 		}

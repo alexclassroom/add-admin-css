@@ -61,12 +61,12 @@ add_filter( 'c2c_add_admin_css_files', 'my_admin_css_files' );
 
 ### `c2c_add_admin_css_disable_css` _(filter)_
 
-The `c2c_add_admin_css_disable_css` filter allows programmatic determination of whether the CSS defined via this plugin should be output or not.
+The `c2c_add_admin_css_disable_css` filter allows programmatic determination of whether output of the CSS defined via this plugin should be disabled or not.
 
 #### Arguments
 
 * `$disable` _(bool)_ :
-Whether or not CSS defined via this plugin should be output or not. True if output should be disabled, else false.
+Whether or not output of the CSS defined via this plugin should be disabled or not. True if CSS output should be disabled, else false. Default false.
 
 #### Example
 
