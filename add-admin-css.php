@@ -534,7 +534,7 @@ HTML;
 	 *
 	 * CSS will always be output in the admin unless:
 	 * - Recovery mode is enabled.
-	 * - The filter 'c2c_add_admin_css_show_css' return false.
+	 * - The filter 'c2c_add_admin_css_disable_css' returns true.
 	 *
 	 * @since 1.7
 	 *
