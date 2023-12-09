@@ -106,6 +106,10 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	///
 
 
+	public function set_admin_user() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+	}
+
 	public function get_action_output( $action = 'admin_head' ) {
 		if ( 'wp_head' === $action ) {
 			// This enqueues a script that doesn't exist in the develop.svn repo.
@@ -479,10 +483,19 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->assertFalse( $this->obj->is_recovery_mode_enabled() );
 	}
 
-	public function test_is_recovery_mode_enabled_with_query_param_true() {
+	public function test_is_recovery_mode_enabled_with_query_param_true_for_non_admin() {
 		$this->test_turn_on_admin();
 
 		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
+
+		$this->assertFalse( $this->obj->is_recovery_mode_enabled() );
+	}
+
+	public function test_is_recovery_mode_enabled_with_query_param_true_for_admin() {
+		$this->test_turn_on_admin();
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
+		$this->set_admin_user();
 
 		$this->assertTrue( $this->obj->is_recovery_mode_enabled() );
 	}
@@ -501,8 +514,17 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->assertTrue( $this->obj->can_show_css() );
 	}
 
-	public function test_can_show_css_with_true_query_param() {
+	public function test_can_show_css_with_true_query_param_by_non_admin() {
 		$this->test_turn_on_admin();
+
+		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
+
+		$this->assertTrue( $this->obj->can_show_css() );
+	}
+
+	public function test_can_show_css_with_true_query_param_by_admin() {
+		$this->test_turn_on_admin();
+		$this->set_admin_user();
 
 		$_GET[ c2c_AddAdminCSS::NO_CSS_QUERY_PARAM ] = '1';
 
@@ -556,8 +578,16 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	 * recovery_mode_notice()
 	 */
 
-	public function test_recovery_mode_via_query_param_disables_add_css() {
-		$this->test_can_show_css_with_true_query_param();
+	public function test_recovery_mode_via_query_param_by_non_admin_does_not_disable_add_css() {
+		$this->test_can_show_css_with_true_query_param_by_non_admin();
+
+		$out = $this->test_add_css_to_head_with_just_css();
+
+		$this->assertNotEmpty( $out );
+	}
+
+	public function test_recovery_mode_via_query_param_by_admin_disables_add_css() {
+		$this->test_can_show_css_with_true_query_param_by_admin();
 
 		$out = $this->test_add_css_to_head_with_just_css( '' );
 
@@ -577,16 +607,24 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->assertEmpty( $this->get_action_output( 'admin_notices' ) );
 	}
 
-	public function test_recovery_mode_notice_when_css_disabled_by_query_param() {
+	public function test_recovery_mode_notice_when_css_disabled_by_query_param_by_admin() {
 		$this->fake_current_screen();
 
-		$this->test_can_show_css_with_true_query_param();
+		$this->test_can_show_css_with_true_query_param_by_admin();
 
 		$expected = "			<div class=\"notice notice-error\">
 				<p><strong>RECOVERY MODE ENABLED:</strong> CSS output for this plugin is disabled on this page view.</p>
 			</div>";
 
 		$this->assertEquals( $expected, $this->get_action_output( 'admin_notices' ) );
+	}
+
+	public function test_recovery_mode_notice_when_css_disabled_by_query_param_by_non_admin() {
+		$this->fake_current_screen();
+
+		$this->test_can_show_css_with_true_query_param_by_non_admin();
+
+		$this->assertEmpty( $this->get_action_output( 'admin_notices' ) );
 	}
 
 	/*
