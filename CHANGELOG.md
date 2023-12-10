@@ -11,6 +11,7 @@
 * Change: Update plugin framework to 066
     * 066:
     * Change: Add styles for nested lists within settings descriptions
+    * Change: Note compatibility through WP 6.4+
     * 065:
     * New: Add support for 'inline_help' setting configuration option
     * New: Add support for 'raw_help' setting configuration option
