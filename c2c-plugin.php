@@ -258,7 +258,7 @@ abstract class c2c_Plugin_066 {
 			add_filter( 'http_request_args', array( $this, 'disable_update_check' ), 5, 2 );
 		}
 
-		if ( $this->show_admin && $this->settings_page && ! empty( $this->config ) && current_user_can( 'manage_options' ) ) {
+		if ( $this->show_admin && $this->settings_page && ! empty( $this->config ) && current_user_can( $this->get_manage_options_capability() ) ) {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 			if ( ! $this->disable_contextual_help ) {
 				if ( version_compare( $GLOBALS['wp_version'], '3.3', '<' ) ) {
@@ -366,6 +366,33 @@ abstract class c2c_Plugin_066 {
 		unset( $plugins->active[ array_search( $this->plugin_basename, $plugins->active ) ] );
 		$r['body']['plugins'] = serialize( $plugins );
 		return $r;
+	}
+
+	/**
+	 * Returns the capability needed to configure the plugin via its settings page.
+	 *
+	 * Note: This does not actually check if the plugin has a settings page, only
+	 * what the capability is that would be needed to use it if it was enabled.
+	 *
+	 * @since 066
+	 *
+	 * @return string The capability. Default 'manage_options'.
+	 */
+	public function get_manage_options_capability() {
+		$default_cap = 'manage_options';
+		/**
+		 * Filters the capability needed to configure the plugin via its settings page.
+		 *
+		 * @since 066
+		 *
+		 * @param string $capability The capability. Default 'manage_options'.
+		 */
+		$cap = apply_filters( $this->get_hook( 'manage_options_capability' ), $default_cap );
+		if ( ! $cap || ! is_string( $cap ) ) {
+			$cap = $default_cap;
+		}
+
+		return $cap;
 	}
 
 	/**
@@ -771,7 +798,7 @@ HTML;
 		}
 		$menu_func = 'add_' . $func_root . '_page';
 		if ( function_exists( $menu_func ) ) {
-			$this->options_page = call_user_func( $menu_func, $this->name, $this->menu_name, 'manage_options', $this->plugin_basename, array( $this, 'options_page' ) );
+			$this->options_page = call_user_func( $menu_func, $this->name, $this->menu_name, $this->get_manage_options_capability(), $this->plugin_basename, array( $this, 'options_page' ) );
 			add_action( 'load-' . $this->options_page, array( $this, 'help_tabs' ) );
 		}
 	}
