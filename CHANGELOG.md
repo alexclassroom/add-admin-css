@@ -11,6 +11,7 @@
 * Change: Update plugin framework to 066
     * 066:
     * Change: Add styles for nested lists within settings descriptions
+    * Change: Explicitly declare object variables rather than doing so dynamically
     * Change: Note compatibility through WP 6.4+
     * Change: Update copyright date (2024)
     * 065:

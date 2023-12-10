@@ -34,6 +34,70 @@ defined( 'ABSPATH' ) or die();
 if ( ! class_exists( 'c2c_Plugin_066' ) ) :
 
 abstract class c2c_Plugin_066 {
+
+	/** @var string The name of the option used to store plugin's settings. */
+	public $admin_options_name = '';
+
+	/** @var array Associative array of configuration settings for the plugin.  */
+	public $config = array();
+
+	/** @var bool Prevent overriding of the contextual help? */
+	public $disable_contextual_help = false;
+
+	/** @var bool Prevent WP from checking for updates to this plugin? */
+	public $disable_update_check = false;
+
+	/** @var string Prefix for all hooks. */
+	public $hook_prefix;
+
+	/** @var string Name assigned to the settings form. */
+	public $form_name;
+
+	/** @var string The name used for the plugin's settings page in the admin menu. */
+	public $menu_name;
+
+	/** @var string Full, localized version of the plugin name. */
+	public $name;
+
+	/** @var string Nonce field value use on the settings form. */
+	public $nonce_field;
+
+	/** @var string The core settings page under which the plugin settings page will be listed in the admin menu. */
+	public $settings_page;
+
+	/** @var bool Should settings page be shown? Only applies if admin is enabled. */
+	public $show_admin;
+
+	/** @var string Textdomain for localization. */
+	public $textdomain;
+
+	/** @var string Subdirectory, relative to plugin's root, to hold localization files. */
+	public $textdomain_subdir;
+
+	/** @var string Short (2-3 char) identifier for plugin author. */
+	public $author_prefix;
+
+	/** @var string A unique base ID for the plugin (generally a lower-case, dash-separated version of plugin name). */
+	public $id_base;
+
+	/** @var string The options page ID returned when the options page gets created. */
+	public $options_page;
+
+	/** @var string The path to the root of the plugin. */
+	public $plugin_basename;
+
+	/** @var string The path to the main plugin file. */
+	public $plugin_file;
+
+	/** @var string The URL to the main plugin file. */
+	public $plugin_path;
+
+	/** @var string The underscored version of $id_base. */
+	public $u_id_base;
+
+	/** @var string The current version of the plugin. */
+	public $version;
+
 	protected $plugin_css_version = '009';
 	protected $options            = array();
 	protected $options_from_db    = '';
