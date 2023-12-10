@@ -1188,7 +1188,7 @@ HTML;
 	 *
 	 * @return string The plugin-specific version of the hook name.
 	 */
-	protected function get_hook( $hook ) {
+	public function get_hook( $hook ) {
 		return $this->hook_prefix . '_' . $hook;
 	}
 

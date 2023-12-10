@@ -10,6 +10,7 @@
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 066
     * 066:
+    * Change: Make `get_hook()` public rather than protected
     * Change: Add styles for nested lists within settings descriptions
     * Change: Explicitly declare object variables rather than doing so dynamically
     * Change: Note compatibility through WP 6.4+
