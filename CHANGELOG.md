@@ -27,7 +27,7 @@
     * Change: Store donation URL as object variable
     * Change: Update strings used for settings page donation link
 * Change: Update and improve long description and numerous FAQ entries
-* Change: Note compatibility through WP 6.2+
+* Change: Note compatibility through WP 6.4+
 * Change: Tweak installation instruction
 * New: Add `.gitignore` file
 * Unit tests:
