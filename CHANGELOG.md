@@ -31,6 +31,9 @@
 * Change: Tweak installation instruction
 * New: Add `.gitignore` file
 * Unit tests:
+    * Allow tests to run against current versions of WordPress
+    * New: Add `composer.json` for PHPUnit Polyfill dependency
+    * Change: Prevent PHP warnings due to missing core-related generated files
     * New: Add tests to verify filtered values output nothing when empty
     * New: Add test to check that the appropriate number of framework strings are translatable
     * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
