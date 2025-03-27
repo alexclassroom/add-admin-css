@@ -57,7 +57,7 @@
     * New: Add tests to verify filtered values output nothing when empty
     * New: Add test to check that the appropriate number of framework strings are translatable
     * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
-* Change: Update copyright date (2024)
+* Change: Update copyright date (2025)
 
 ## 2.0.1 _(2021-05-30)_
 
