@@ -8,14 +8,28 @@
 * Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
 * Change: Explicitly state the plugin name in the recovery mode admin notice to avoid ambiguity
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
-* Change: Update plugin framework to 066
+* Change: Update plugin framework to 067
+    * 067:
+    * Breaking: Require config attribute 'input_attributes' to be an array
+    * Hardening: Treat input attributes as array and escape each element before output
+    * Change: Ensure config attribute values are of the same datatype as their defaults
+    * Change: Simplify `form_action_url()` to avoid using a server global
+    * Change: Use `form_action_url()` in `plugin_action_links()` rather than duplicating its functionality
+    * Change: Escape output of all translated strings
+    * Change: Make `get_hook()` public rather than protected
+    * Change: Explicitly declare object variables rather than doing so dynamically
+    * Change: Convert `register_filters()` to an abstract declaration
+    * Change: Use double quotes for attribute of paragraph for setting description
+    * Change: Prevent unwarranted PHPCS complaints about nonces
+    * Change: Improve function documentation
+    * Change: Adjust function documentation formatting to align with WP core
+    * Change: Note compatibility through WP 6.5+
+    * Change: Drop compatibility with version of WP older than 5.5
+    * Change: Update copyright date (2024)
     * 066:
     * New: Add customization of capability needed to manage plugin settings (via new filter {plugin_prefix}_manage_options_capability)
-    * Change: Make `get_hook()` public rather than protected
     * Change: Add styles for nested lists within settings descriptions
-    * Change: Explicitly declare object variables rather than doing so dynamically
-    * Change: Note compatibility through WP 6.4+
-    * Change: Update copyright date (2024)
+    * Change: Note compatibility through WP 6.3+
     * 065:
     * New: Add support for 'inline_help' setting configuration option
     * New: Add support for 'raw_help' setting configuration option

@@ -2,12 +2,12 @@
 /**
  * @package C2C_Plugin
  * @author  Scott Reilly
- * @version 066
+ * @version 067
  */
 /*
 Basis for other plugins.
 
-Compatible with WordPress 4.9 through 6.4+.
+Compatible with WordPress 5.5 through 6.5+.
 
 */
 
@@ -31,9 +31,9 @@ Compatible with WordPress 4.9 through 6.4+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_Plugin_066' ) ) :
+if ( ! class_exists( 'c2c_Plugin_067' ) ) :
 
-abstract class c2c_Plugin_066 {
+abstract class c2c_Plugin_067 {
 
 	/** @var string The name of the option used to store plugin's settings. */
 	public $admin_options_name = '';
@@ -111,12 +111,12 @@ abstract class c2c_Plugin_066 {
 		'help'             => '',
 		'inline_help'      => '',
 		'input'            => '',
-		'input_attributes' => '',
+		'input_attributes' => [],
 		'label'            => '',
 		'more_help'        => '',
 		'no_wrap'          => false,
 		'numbered'         => false,
-		'options'          => '',
+		'options'          => [],
 		'output'           => '', // likely deprecated
 		'raw_help'         => '',
 		'required'         => false
@@ -133,7 +133,7 @@ abstract class c2c_Plugin_066 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '066';
+		return '067';
 	}
 
 	/**
@@ -148,7 +148,7 @@ abstract class c2c_Plugin_066 {
 	protected function __construct( $version, $id_base, $author_prefix, $file, $plugin_options = array() ) {
 		$id_base = sanitize_title( $id_base );
 		if ( ! file_exists( $file ) ) {
-			die( sprintf( $this->get_c2c_string( 'Invalid file specified for C2C_Plugin: %s' ), $file ) );
+			die( esc_html( sprintf( $this->get_c2c_string( 'Invalid file specified for C2C_Plugin: %s' ), $file ) ) );
 		}
 
 		$u_id_base = str_replace( '-', '_', $id_base );
@@ -199,8 +199,7 @@ abstract class c2c_Plugin_066 {
 	 * @since 062 Throw error to actually prevent cloning.
 	 */
 	public function __clone() {
-		/* translators: %s: Name of plugin class. */
-		throw new Error( sprintf( $this->get_c2c_string( '%s cannot be cloned.' ), __CLASS__ ) );
+		throw new Error( esc_html( sprintf( $this->get_c2c_string( '%s cannot be cloned.' ), __CLASS__ ) ) );
 	}
 
 	/**
@@ -210,8 +209,7 @@ abstract class c2c_Plugin_066 {
 	 * @since 062 Throw error to actually prevent unserialization.
 	 */
 	public function __wakeup() {
-		/* translators: %s: Name of plugin class. */
-		throw new Error( sprintf( $this->get_c2c_string( '%s cannot be unserialized.' ), __CLASS__ ) );
+		throw new Error( esc_html( sprintf( $this->get_c2c_string( '%s cannot be unserialized.' ), __CLASS__ ) ) );
 	}
 
 	/**
@@ -424,9 +422,7 @@ abstract class c2c_Plugin_066 {
 	public function allowed_options( $options ) {
 		$added = array( $this->admin_options_name => array( $this->admin_options_name ) );
 
-		return function_exists( 'add_allowed_options' )
-			? add_allowed_options( $added, $options )
-			: add_option_whitelist( $added, $options );
+		return add_allowed_options( $added, $options );
 	}
 
 	/**
@@ -441,14 +437,14 @@ abstract class c2c_Plugin_066 {
 			$localized_heading_text = '';
 		}
 
-		if ( empty( $localized_heading_text ) ) {
+		if ( ! $localized_heading_text ) {
 			$localized_heading_text = $this->name;
 		}
 		if ( $localized_heading_text ) {
-			echo '<h1>' . $localized_heading_text . "</h1>\n";
+			echo '<h1>' . esc_html( $localized_heading_text ) . "</h1>\n";
 		}
 		if ( ! $this->disable_contextual_help ) {
-			echo '<p class="see-help">' . $this->get_c2c_string( 'See the "Help" link to the top-right of the page for more help.' ) . "</p>\n";
+			echo '<p class="see-help">' . esc_html( $this->get_c2c_string( 'See the "Help" link to the top-right of the page for more help.' ) ) . "</p>\n";
 		}
 	}
 
@@ -496,9 +492,14 @@ abstract class c2c_Plugin_066 {
 
 	/**
 	 * Sanitizes user inputs prior to saving.
+	 *
+	 * @param string[] $inputs
+	 * @return string[] Sanitized inputs.
 	 */
 	public function sanitize_inputs( $inputs ) {
 		do_action( $this->get_hook( 'before_save_options' ), $this );
+		// PHPCS: The Settings API already verifies nonce, so no need to do so here.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST['Reset'] ) ) {
 			$options = $this->reset_options();
 			add_settings_error( 'general', 'settings_reset', $this->get_c2c_string( 'Settings reset.' ), 'updated' );
@@ -534,7 +535,6 @@ abstract class c2c_Plugin_066 {
 									$val = str_replace( ',', '', $val );
 								}
 								if ( ! empty( $val ) && ( ! is_numeric( $val ) || ( intval( $val ) != round( $val ) ) ) ) {
-									/* translators: %s: Label for setting. */
 									$msg = sprintf( $this->get_c2c_string( 'Expected integer value for: %s' ), $this->config[ $opt ]['label'] );
 									$error = true;
 									$val = '';
@@ -597,6 +597,16 @@ abstract class c2c_Plugin_066 {
 	abstract public function get_c2c_string( $string );
 
 	/**
+	 * Registers filters.
+	 *
+	 * @since 065 Changed to be abstract.
+	 *
+	 * NOTE: This occurs during the 'init' filter, so you can't use this to hook
+	 * anything that happens earlier.
+	 */
+	abstract public function register_filters();
+
+	/**
 	 * Adds a new option to the plugin's configuration.
 	 *
 	 * Intended to be used for dynamically adding a new option after the config
@@ -621,13 +631,13 @@ abstract class c2c_Plugin_066 {
 	}
 
 	/**
-	 * Verify that the necessary configuration files were set in the inheriting class.
+	 * Verifies that the necessary configuration options were set in the inheriting class.
 	 */
 	public function verify_config() {
 		// Ensure required configuration options have been configured via the sub-class. Die if any aren't.
 		foreach ( $this->required_config as $config ) {
 			if ( empty( $this->$config ) ) {
-				die( sprintf( $this->get_c2c_string( "The plugin configuration option '%s' must be supplied." ), $config ) );
+				die( esc_html( sprintf( $this->get_c2c_string( "The plugin configuration option '%s' must be supplied." ), $config ) ) );
 			}
 		}
 
@@ -655,10 +665,38 @@ abstract class c2c_Plugin_066 {
 
 		foreach ( $options as $opt ) {
 			foreach ( $this->config_attributes as $attrib => $default) {
+				// Use the default if not configured.
 				if ( ! isset( $this->config[ $opt ][ $attrib ] ) ) {
 					$this->config[ $opt ][ $attrib ] = $default;
 				}
+				// Ensure configured value is of same datatype as default.
+				else {
+					// Config attributes that can be any datatype (or at least can differ from the default).
+					$can_be_any_datatype = [ 'default' ];
+
+					$configured_value = $this->config[ $opt ][ $attrib ];
+					$datatype = '';
+					if ( in_array( $attrib, $can_be_any_datatype ) ) {
+						// Do nothing.
+					} elseif ( is_array( $default ) && ! is_array( $configured_value ) ) {
+						$datatype = 'an array';
+					} elseif ( is_bool( $default ) && ! is_bool( $configured_value ) ) {
+						$datatype = 'a boolean';
+					} elseif ( is_int( $default ) && ! is_int( $configured_value ) ) {
+						$datatype = 'an integer';
+					} elseif ( is_float( $default ) && ! is_float( $configured_value ) ) {
+						$datatype = 'a float';
+					} elseif ( is_string( $default ) && ! is_string( $configured_value ) ) {
+						$datatype = 'a string';
+					}
+
+					if ( $datatype ) {
+						_doing_it_wrong( 'c2c_Plugin::verify_options', esc_html( "The c2c_Plugin configuration {$opt} attribute {$attrib} should be {$datatype} and thus the default is being used instead." ), '067' );
+						$this->config[ $opt ][ $attrib ] = $default;
+					}
+				}
 			}
+
 			if ( 'array' === $this->config[ $opt ]['datatype'] && ! is_array( $this->config[ $opt ]['default'] ) ) {
 				$this->config[ $opt ]['default'] = $this->config[ $opt ]['default'] ?
 					array( $this->config[ $opt ]['default'] ) :
@@ -673,15 +711,6 @@ abstract class c2c_Plugin_066 {
 	 */
 	protected function load_textdomain() {
 		load_plugin_textdomain( $this->id_base );
-	}
-
-	/**
-	 * Registers filters.
-	 * NOTE: This occurs during the 'init' filter, so you can't use this to hook
-	 * anything that happens earlier.
-	 */
-	public function register_filters() {
-		// This should be overridden in order to define filters.
 	}
 
 	/**
@@ -702,14 +731,14 @@ abstract class c2c_Plugin_066 {
 			return $contextual_help;
 		}
 
-		$help = '<h3>' . $this->get_c2c_string( 'More Plugin Help' ) . '</h3>';
+		$help = '<h3>' . esc_html( $this->get_c2c_string( 'More Plugin Help' ) ) . '</h3>';
 		$help .= '<p class="more-help">';
 		$help .= sprintf(
 			'<a title="%s" class="thickbox" href="%s">%s</a>%s',
 			esc_attr( sprintf( $this->get_c2c_string( 'More information about %1$s %2$s' ), $this->name, $this->version ) ),
 			esc_url( admin_url( "plugin-install.php?tab=plugin-information&amp;plugin={$this->id_base}&amp;TB_iframe=true&amp;width=640&amp;height=514" ) ),
-			$this->get_c2c_string( 'Click for more help on this plugin' ),
-			$this->get_c2c_string( ' (especially check out the "Other Notes" tab, if present)' )
+			esc_html( $this->get_c2c_string( 'Click for more help on this plugin' ) ),
+			esc_html( $this->get_c2c_string( ' (especially check out the "Other Notes" tab, if present)' ) )
 		);
 		$help .= ".</p>\n";
 
@@ -731,10 +760,11 @@ abstract class c2c_Plugin_066 {
 
 		$c2c_plugin_css_was_output = true;
 		$logo = plugins_url( 'c2c_minilogo.png', $this->plugin_file );
+
 		/**
-		 * Remember to increment the plugin_css_version variable if changing the CSS
+		 * Note: Remember to increment the plugin_css_version variable if changing the CSS.
 		 */
-		echo <<<HTML
+		?>
 		<style>
 		.long-text {width:98% !important;}
 		#c2c {
@@ -753,7 +783,7 @@ abstract class c2c_Plugin_066 {
 			padding:5px 40px 0 0;
 			width:45%;
 			min-height:40px;
-			background:url('$logo') no-repeat center right;
+			background:url('<?php echo esc_url( $logo ); ?>') no-repeat center right;
 			font-size:larger;
 		}
 		#c2c span {
@@ -777,8 +807,7 @@ abstract class c2c_Plugin_066 {
 		ul.description li, ol.description li {margin-left:1rem;}
 		ul.description ul, ul.description ol, ol.description ul, ol.description ol {list-style:circle;margin-top:0.4rem;}
 		</style>
-
-HTML;
+	<?php
 	}
 
 	/**
@@ -804,7 +833,7 @@ HTML;
 	}
 
 	/**
-	 * Initialize help tabs.
+	 * Initializes help tabs.
 	 *
 	 * @since 034
 	 */
@@ -826,6 +855,8 @@ HTML;
 	 * This should be overridden by inheriting class if it needs help content.
 	 *
 	 * @since 034
+	 *
+	 * @param WP_Screen $screen
 	 */
 	public function help_tabs_content( $screen ) {
 		$screen->add_help_tab( array(
@@ -843,30 +874,38 @@ HTML;
 	 * @return array Links associated with a plugin on the admin Plugins page
 	 */
 	public function plugin_action_links( $action_links ) {
-		$settings_link = '<a href="' . $this->settings_page . '.php?page='.$this->plugin_basename.'">' . $this->get_c2c_string( 'Settings' ) . '</a>';
+		$settings_link = '<a href="' . esc_url( $this->form_action_url() ) . '">' . $this->get_c2c_string( 'Settings' ) . '</a>';
 		array_unshift( $action_links, $settings_link );
 		return $action_links;
 	}
 
 	/**
 	 * Adds donate link to plugin row.
+	 *
+	 * @param string[] $links Array of plugin row links.
+	 * @param string   $file  Filename.
+	 * @return string[]
 	 */
 	public function donate_link( $links, $file ) {
-		if ( $file == $this->plugin_basename ) {
-			$title         = $this->get_c2c_string( 'Coffee fuels my coding.' );
-			$links[] = '<a href="' . esc_url( $this->donation_url ) . '" title="' . esc_attr( $title ) . '">' . $this->get_c2c_string( 'Donate' ) . '</a>';
+		if ( $file === $this->plugin_basename ) {
+			$title   = $this->get_c2c_string( 'Coffee fuels my coding.' );
+			$links[] = sprintf(
+				'<a href="%s" title="%s">%s</a>',
+				esc_url( $this->donation_url ),
+				esc_attr( $title ),
+				esc_html( $this->get_c2c_string( 'Donate' ) )
+			);
 		}
 		return $links;
 	}
 
 	/**
-	 * See if the setting is pertinent to this version of WP
+	 * Determines if the setting is pertinent to this version of WP.
 	 *
 	 * @since 013
 	 *
 	 * @param string $opt The option name.
-	 *
-	 * @return bool If the option is valid for this version of WP.
+	 * @return bool True if the option is valid for this version of WP, else false.
 	 */
 	protected function is_option_valid( $opt ) {
 		global $wp_version;
@@ -887,7 +926,6 @@ HTML;
 	 * Returns the list of option names.
 	 *
 	 * @param bool $include_non_options Optional. Should non-options be included? Default is false.
-	 *
 	 * @return array Array of option names.
 	 */
 	protected function get_option_names( $include_non_options = false ) {
@@ -914,9 +952,9 @@ HTML;
 	 * Returns either the buffered array of all options for the plugin, or
 	 * obtains the options and buffers the value.
 	 *
-	 * @param bool $with_current_values Optional. Should the currently saved values be returned? If false, then the plugin's defaults are returned. Default is true.
-	 *
-	 * @return array The options array for the plugin (which is also stored in $this->options if !$with_options).
+	 * @param bool $with_current_values Optional. Should the currently saved values be returned?
+	 *                                  If false, then the plugin's defaults are returned. Default is true.
+	 * @return array The options array for the plugin.
 	 */
 	public function get_options( $with_current_values = true ) {
 		if ( $with_current_values && $this->options ) {
@@ -962,9 +1000,8 @@ HTML;
 	 *
 	 * @since 037
 	 *
-	 * @param array $settings   The new setting value(s)
+	 * @param array $settings   The new settings values.
 	 * @param bool  $with_reset Should the options be reset, with the new settings overlaid on top of the default settings?
-	 *
 	 * @return array
 	 */
 	public function update_option( $settings, $with_reset = false ) {
@@ -980,7 +1017,6 @@ HTML;
 	 * Gets the name to use for a form's <input type="hidden" name="XXX" value="1" />
 	 *
 	 * @param string $prefix A prefix string, unique to the form.
-	 *
 	 * @return string The name.
 	 */
 	protected function get_form_submit_name( $prefix ) {
@@ -988,25 +1024,27 @@ HTML;
 	}
 
 	/**
-	 * Returns the URL for a plugin's form to use for its action attribute
+	 * Returns the admin-relative URL for a plugin's form to use for its action attribute.
 	 *
-	 * @return string The action URL
+	 * @return string The action URL.
 	 */
 	protected function form_action_url() {
-		return $_SERVER['PHP_SELF'] . '?page=' . $this->plugin_basename;
+		return $this->settings_page . '.php?page=' . $this->plugin_basename;
 	}
 
 	/**
-	 * Checks if the plugin's settings page has been submitted.
+	 * Determines if the plugin's settings page has been submitted.
 	 *
 	 * @return bool True if the plugin's settings have been submitted for saving, else false.
 	 */
 	protected function is_submitting_form() {
+		// PHPCS: The POST value only being read and not meaningfully used.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		return ( isset( $_POST['option_page'] ) && ( $_POST['option_page'] == $this->admin_options_name ) );
 	}
 
 	/**
-	 * Checks if the current page is the plugin's settings page.
+	 * Determines if the current page is the plugin's settings page.
 	 *
 	 * Note: This should not be used during or before `'admin_init'` since the
 	 * current screen won't be set yet.
@@ -1021,7 +1059,7 @@ HTML;
 		if ( ! did_action( 'admin_init' ) ) {
 			_doing_it_wrong(
 				__METHOD__,
-				sprintf( $this->get_c2c_string( 'The method %1$s should not be called until after the %2$s action.' ), 'is_plugin_admin_page()', 'admin_init' ),
+				esc_html( sprintf( $this->get_c2c_string( 'The method %1$s should not be called until after the %2$s action.' ), 'is_plugin_admin_page()', 'admin_init' ) ),
 				'063'
 			);
 		}
@@ -1035,6 +1073,28 @@ HTML;
 		&&
 			$current_screen->id === $this->options_page
 		);
+	}
+
+	/**
+	 * Returns escaped attributes string for an HTML tag.
+	 *
+	 * @since 067
+	 *
+	 * @param string[] $attributes Associative array of attribute names and values.
+	 * @return string
+	 */
+	public function esc_attributes( $attributes ) {
+		$string = '';
+
+		foreach ( $attributes as $key => $value ) {
+			$string .= sprintf(
+				'%s="%s" ',
+				esc_attr( wp_strip_all_tags( $key ) ),
+				esc_html( wp_strip_all_tags( $value ) )
+			);
+		}
+
+		return trim( $string );
 	}
 
 	/**
@@ -1088,9 +1148,12 @@ HTML;
 			$value = number_format_i18n( $value );
 		}
 		$attributes = $this->config[ $opt ]['input_attributes'];
+		if ( ! is_array( $attributes ) ) {
+			$attributes = [];
+		}
 		$this->config[ $opt ]['class'][] = 'c2c-' . $input;
 		if ( ( 'textarea' == $input || 'inline_textarea' == $input ) && $this->config[ $opt ]['no_wrap'] ) {
-			$attributes .= ' wrap="off"'; // Does not validate, but only cross-browser technique
+			$attributes['wrap'] = 'off'; // Does not validate, but only cross-browser technique
 		}
 		elseif ( in_array( $input, array( 'text', 'long_text', 'short_text' ) ) ) {
 			$this->config[ $opt ]['class'][]  = ( ( $input == 'short_text' ) ? 'small-text' : 'regular-text' );
@@ -1103,7 +1166,10 @@ HTML;
 			$this->config[ $opt ]['class'][] = 'small-text';
 		}
 		$class = implode( ' ', $this->config[ $opt ]['class'] );
-		$attribs = "name='{$popt}' id='{$opt}' class='{$class}' {$attributes}";
+		$attributes['class'] = $class;
+		$attributes['id']    = $opt;
+		$attributes['name']  = $popt;
+
 		if ( $input == '' ) {
 // Change of implementation prevents this from being possible (since this function only gets called for registered settings)
 //			if ( !empty( $this->config[ $opt ]['output'] ) )
@@ -1114,49 +1180,89 @@ HTML;
 			if ( $input == 'textarea' ) {
 				echo "</td><tr><td colspan='2'>";
 			}
-			echo "<textarea {$attribs}>{$value}</textarea>\n";
+			printf(
+				'<textarea %s>%s</textarea>' . "\n",
+				// PHPCS: The keys and values of all attributes are being escaped by esc_attributes(), so this is safe.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$this->esc_attributes( $attributes ),
+				wp_kses_post( $value )
+			);
 		} elseif ( $input == 'select' ) {
-			echo "<select $attribs>";
+			// PHPCS: The keys and values of all attributes are being escaped by esc_attributes(), so this is safe.
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<select ' . $this->esc_attributes( $attributes ) . '>';
 			if ( $this->config[ $opt ]['datatype'] == 'hash' ) {
 				foreach ( (array) $this->config[ $opt ]['options'] as $sopt => $sval ) {
-					echo "<option value='{$sopt}' " . selected( $value, $sopt, false ) . ">{$sval}</option>\n";
+					printf(
+						'<option value="%s" ' . selected( $value, $sopt, false ) . ">%s</option>\n",
+						esc_attr( $sopt ),
+						esc_html( $sval )
+					);
 				}
 			} else {
 				foreach ( (array) $this->config[ $opt ]['options'] as $sopt ) {
-					echo "<option value='{$sopt}' " . selected( $value, $sopt, false ) . ">{$sopt}</option>\n";
+					printf(
+						'<option value="%s" ' . selected( $value, $sopt, false ) . ">%s</option>\n",
+						esc_attr( $sopt ),
+						esc_attr( $sopt )
+					);
 				}
 			}
 			echo "</select>";
 		} elseif ( $input == 'multiselect' ) {
 			echo '<fieldset class="c2c-fieldset">' . "\n";
 			foreach ( (array) $this->config[ $opt ]['options'] as $sopt ) {
-				echo "<input type='checkbox' {$attribs} value='{$sopt}' " . checked( in_array( $sopt, $value ), true, false ) . ">{$sopt}</input><br />\n";
-			}
+				printf(
+					'<input type="checkbox" %s value="%s" ' . checked( in_array( $sopt, $value ), true, false ) . ">%s</input><br />\n",
+					// PHPCS: The keys and values of all attributes are being escaped by esc_attributes(), so this is safe.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					$this->esc_attributes( $attributes ),
+					esc_attr( $sopt ),
+					esc_html( $sopt )
+				);
+				}
 			echo '</fieldset>';
 		} elseif ( $input == 'checkbox' ) {
-			echo "<input type='{$input}' {$attribs} value='1' " . checked( $value, 1, false ) . " />\n";
+			printf(
+				'<input type="%s" %s value="1" ' . checked( $value, 1, false ) . ' />' . "\n",
+				esc_attr( $input ),
+				// PHPCS: The keys and values of all attributes are being escaped by esc_attributes(), so this is safe.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$this->esc_attributes( $attributes )
+			);
 			if ( ! empty( $this->config[ $opt ]['help'] ) ) {
-				printf( "<label class='description' for='%s'>%s</label>\n", $opt, $this->config[ $opt ]['help'] );
+				printf(
+					"<label class='description' for='%s'>%s</label>\n",
+					esc_attr( $opt ),
+					wp_kses_post( $this->config[ $opt ]['help'] )
+				);
 				$this->config[ $opt ]['help'] = '';
 			}
 		} else { // Only 'text' and 'password' should fall through to here.
-			echo "<input type='{$input}' {$attribs} value='" . esc_attr( $value ) . "' />\n";
+			printf(
+				'<input type="%s" %s value="%s" />' . "\n",
+				esc_attr( $input ),
+				// PHPCS: The keys and values of all attributes are being escaped by esc_attributes(), so this is safe.
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$this->esc_attributes( $attributes ),
+				esc_attr( $value )
+			);
 		}
 		// Help intended to be inline (usually with a text field; checkboxes naturally have their help inline)
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['inline_help'], $opt, 'inline_help' ) ) {
-			echo "<p class='description inline-description'>{$help}</p>\n";
+			echo '<p class="description inline-description">' . wp_kses_post( $help ) . "</p>\n";
 		}
 		// Help intended to be shown below an input field.
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['help'], $opt, 'help' ) ) {
-			echo "<p class='description'>{$help}</p>\n";
+			echo '<p class="description">' . wp_kses_post( $help ) . "</p>\n";
 		}
 		// Additional paragraph of help intended to follow the main 'help'.
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['more_help'], $opt, 'more_help' ) ) {
-			echo "<p class='description'>{$help}</p>\n";
+			echo '<p class="description">' . wp_kses_post( $help ) . "</p>\n";
 		}
 		// Additional help of custom markup (block elements that wouldn't fit into the default help paragraph markup).
 		if ( $help = apply_filters( $this->get_hook( 'option_help'), $this->config[ $opt ]['raw_help'], $opt, 'raw_help' ) ) {
-			echo $help . "\n";
+			echo wp_kses_post( $help ) . "\n";
 		}
 
 		do_action( $this->get_hook( 'post_display_option' ), $opt );
@@ -1170,7 +1276,7 @@ HTML;
 		$options = $this->get_options();
 
 		if ( $this->saved_settings ) {
-			echo "<div id='message' class='updated fade'><p><strong>" . $this->saved_settings_msg . '</strong></p></div>';
+			echo "<div id='message' class='updated fade'><p><strong>" . esc_html( $this->saved_settings_msg ) . '</strong></p></div>';
 		}
 
 		echo "<div class='wrap'>\n";
@@ -1194,14 +1300,14 @@ HTML;
 
 		echo '<div id="c2c" class="wrap"><div>' . "\n";
 		printf(
-			$this->get_c2c_string( 'This plugin brought to you by %s.' ),
+			wp_kses_data( $this->get_c2c_string( 'This plugin brought to you by %s.' ) ),
 			'<a href="https://coffee2code.com" title="' . esc_attr( $this->get_c2c_string( 'The plugin author homepage.' ) ) . '">Scott Reilly (coffee2code)</a>'
 		);
 		printf(
 			'<span><a href="%1$s" title="%2$s">%3$s</span>',
 			esc_url( $this->donation_url ),
 			esc_attr( $this->get_c2c_string( "Thanks for the consideration; it's much appreciated." ) ),
-			$this->get_c2c_string( 'If this plugin has been useful to you, please consider a donation.' )
+			esc_html( $this->get_c2c_string( 'If this plugin has been useful to you, please consider a donation.' ) )
 		);
 		echo "</div>\n";
 
@@ -1212,7 +1318,6 @@ HTML;
 	 * Returns the full plugin-specific name for a hook.
 	 *
 	 * @param string $hook The name of a hook, to be made plugin-specific.
-	 *
 	 * @return string The plugin-specific version of the hook name.
 	 */
 	public function get_hook( $hook ) {
@@ -1224,7 +1329,7 @@ HTML;
 	 *
 	 * @since 005
 	 *
-	 * @return string The URL
+	 * @return string The URL.
 	 */
 	public function readme_url() {
 		return 'https://plugins.svn.wordpress.org/' . $this->id_base . '/tags/' . $this->version . '/readme.txt';

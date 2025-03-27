@@ -45,7 +45,7 @@ if ( ! class_exists( 'c2c_AddAdminCSS' ) ) :
 
 require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-final class c2c_AddAdminCSS extends c2c_Plugin_066 {
+final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 
 	/**
 	 * Name of plugin's setting.
@@ -157,7 +157,10 @@ final class c2c_AddAdminCSS extends c2c_Plugin_066 {
 					. '</li><li>'
 					. __ ('Files will be output in the order listed above and appear before the CSS defined below.', 'add-admin-css' )
 					. '</li></ul>',
-				'input_attributes' => 'rows="4" cols="40"',
+				'input_attributes' => [
+					'rows' => 4,
+					'cols' => 40,
+				],
 			),
 			'css' => array(
 				'input'            => 'inline_textarea',
@@ -165,7 +168,10 @@ final class c2c_AddAdminCSS extends c2c_Plugin_066 {
 				'datatype'         => 'text',
 				'label'            => __( 'Admin CSS', 'add-admin-css' ),
 				'help'             => __( 'Note that the above CSS will be added to all admin pages and apply for all users able to view those pages.', 'add-admin-css' ),
-				'input_attributes' => 'rows="10" cols="40"',
+				'input_attributes' => [
+					'rows' => 10,
+					'cols' => 40,
+				],
 			),
 		);
 	}
