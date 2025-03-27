@@ -465,7 +465,7 @@ HTML;
 		if ( $files ) {
 			foreach ( (array) $files as $file ) {
 				// Determine an adequate handle for the script.
-				$file_parts = parse_url( $file );
+				$file_parts = wp_parse_url( $file );
 				$handle = basename( $file_parts['path'], '.css' );
 
 				// Determine a version for the script (the one specified, else the plugin's version).

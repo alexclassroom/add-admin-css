@@ -7,6 +7,7 @@
 * Change: Display the files setting help text as a list rather than a paragraph
 * Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
 * Change: Explicitly state the plugin name in the recovery mode admin notice to avoid ambiguity
+* Change: Switch use of `parse_url()` to `wp_parse_url()`
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 067
     * 067:
