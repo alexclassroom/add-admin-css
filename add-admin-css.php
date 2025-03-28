@@ -443,11 +443,9 @@ HTML;
 			$msg = __( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for the Add Admin CSS plugin is disabled on this page view.", 'add-admin-css' );
 		}
 
-		echo <<<HTML
-			<div class="notice notice-error">
-				<p>{$msg}</p>
-			</div>
-HTML;
+		echo '<div class="notice notice-error">' . "\n";
+		echo "\t<p>" . wp_kses( $msg, array( 'code' => array(), 'strong' => array() ) ). "</p>\n";
+		echo '</div>' . "\n";
 	}
 
 	/**
@@ -625,11 +623,9 @@ HTML;
 		$css = trim( apply_filters( 'c2c_add_admin_css', $css ) );
 
 		if ( $css ) {
-			echo "
-			<style>
-			$css
-			</style>
-			";
+			echo "<style>\n";
+			echo esc_html( $css ) . "\n";
+			echo "</style>\n";
 		}
 	}
 
