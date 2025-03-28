@@ -279,36 +279,45 @@ final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 	public function options_page_description( $localized_heading_text = '' ) {
 		parent::options_page_description( __( 'Add Admin CSS Settings', 'add-admin-css' ) );
 		echo '<p>'
-			. __( 'Add additional CSS to your admin pages, which allows you to tweak the appearance of the WordPress administration pages to your liking.', 'add-admin-css' )
+			. esc_html__( 'Add additional CSS to your admin pages, which allows you to tweak the appearance of the WordPress administration pages to your liking.', 'add-admin-css' )
 			. "</p>\n";
 		echo '<p>'
-			. __( 'See the "Advanced Tips" tab in the "Help" section for info on how to use the plugin to programmatically customize CSS.', 'add-admin-css' )
+			. esc_html__( 'See the "Advanced Tips" tab in the "Help" section for info on how to use the plugin to programmatically customize CSS.', 'add-admin-css' )
 			. "</p>\n";
 		echo '<p><strong>'
-			. __( 'TIPS:', 'add-admin-css' )
+			. esc_html__( 'TIPS:', 'add-admin-css' )
 			. "</strong></p>\n";
 		echo '<ul class="c2c-plugin-list">' . "\n";
 		echo '<li>'
-			/* translators: %s: URL for Admin Trim Interface plugin page. */
 			. sprintf(
-				__( 'If you are primarily only interested in hiding certain administration interface elements, take a look at my <a href="%s">Admin Trim Interface</a> plugin.', 'add-admin-css' ),
+				wp_kses(
+					/* translators: %s: URL for Admin Trim Interface plugin page. */
+					__( 'If you are primarily only interested in hiding certain administration interface elements, take a look at my <a href="%s">Admin Trim Interface</a> plugin.', 'add-admin-css' ),
+					array( 'a' => array( 'href' => array() ) )
+				),
 				'https://wordpress.org/plugins/admin-trim-interface/'
 			)
 			. "</li>\n";
 		echo '<li>'
-			/* translators: %s: URL for Admin Expert Mode plugin page. */
 			. sprintf(
-				__( 'If you only want to hide in-page help text, check out my <a href="%s">Admin Expert Mode</a> plugin.', 'add-admin-css' ),
+				wp_kses(
+					/* translators: %s: URL for Admin Expert Mode plugin page. */
+					__( 'If you only want to hide in-page help text, check out my <a href="%s">Admin Expert Mode</a> plugin.', 'add-admin-css' ),
+					array( 'a' => array( 'href' => array() ) )
+				),
 				'https://wordpress.org/plugins/admin-expert-mode/'
 			)
 			. "</li>\n";
 		echo '<li><em>'
-			. __( 'Both plugins mentioned above are geared towards their respective tasks and are very simple to use, requiring no knowledge of CSS.', 'add-admin-css' )
+			. esc_html__( 'Both plugins mentioned above are geared towards their respective tasks and are very simple to use, requiring no knowledge of CSS.', 'add-admin-css' )
 			. "</em></li>\n";
 		echo '<li>'
 			. sprintf(
-				/* translators: %s: URL for Add Admin JavaSCript plugin page. */
-				__( 'If you like this plugin and are interested in also easily adding custom JavaScript to the admin areas of your site, check out my <a href="%s">Add Admin JavaScript</a> plugin.', 'add-admin-css' ),
+				wp_kses(
+					/* translators: %s: URL for Add Admin JavaSCript plugin page. */
+					__( 'If you like this plugin and are interested in also easily adding custom JavaScript to the admin areas of your site, check out my <a href="%s">Add Admin JavaScript</a> plugin.', 'add-admin-css' ),
+					array( 'a' => array( 'href' => array() ) )
+				),
 				'https://wordpress.org/plugins/add-admin-javascript/'
 			)
 			. "</li>\n";
@@ -345,9 +354,14 @@ final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 			return $contextual_help;
 		}
 
-		$help = '<h3>' . __( 'Advanced Tips', 'add-admin-css' ) . '</h3>';
+		$help = '<h3>' . esc_html__( 'Advanced Tips', 'add-admin-css' ) . '</h3>';
 
-		$help .= '<p>' . __( 'You can also programmatically add to or customize any CSS defined in the "Admin CSS" field via the <code>c2c_add_admin_css</code> filter, like so:', 'add-admin-css' ) . '</p>';
+		$help .= '<p>';
+		$help .= wp_kses(
+			__( 'You can also programmatically add to or customize any CSS defined in the "Admin CSS" field via the <code>c2c_add_admin_css</code> filter, like so:', 'add-admin-css' ),
+			array( 'code' => array() )
+		);
+		$help .= '</p>';
 
 		$help .= <<<HTML
 <pre><code>function my_admin_css( \$css ) {
@@ -361,7 +375,12 @@ add_filter( 'c2c_add_admin_css', 'my_admin_css' );</code></pre>
 
 HTML;
 
-		$help .= '<p>' . __( 'You can also programmatically add to or customize any referenced CSS files defined in the "Admin CSS Files" field via the <code>c2c_add_admin_css_files</code> filter, like so:', 'add-admin-css' ) . '</p>';
+		$help .= '<p>';
+		$help .= wp_kses(
+			__( 'You can also programmatically add to or customize any referenced CSS files defined in the "Admin CSS Files" field via the <code>c2c_add_admin_css_files</code> filter, like so:', 'add-admin-css' ),
+			array( 'code' => array() )
+		);
+		$help .= '</p>';
 
 		$help .= <<<HTML
 <pre><code>function my_admin_css_files( \$files ) {
@@ -372,7 +391,12 @@ add_filter( 'c2c_add_admin_css_files', 'my_admin_css_files' );</code></pre>
 
 HTML;
 
-		$help .= '<p>' . __( 'You can also programmatically override whether the CSS defined via this plugin should be output or not with the <code>c2c_add_admin_css_disable_css</code> filter, like so:', 'add-admin-css' ) . '</p>';
+		$help .= '<p>';
+		$help .= wp_kses(
+			__( 'You can also programmatically override whether the CSS defined via this plugin should be output or not with the <code>c2c_add_admin_css_disable_css</code> filter, like so:', 'add-admin-css' ),
+			array( 'code' => array() )
+		);
+		$help .= '</p>';
 
 		$help .= <<<HTML
 <pre><code>function my_limit_add_admin_css_to_admins( \$disable ) {
