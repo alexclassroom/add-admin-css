@@ -226,6 +226,7 @@ final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 			'Donate'
 				=> __( 'Donate', 'add-admin-css' ),
 			'Expected integer value for: %s'
+				/* translators: $s: Label for an input field. */
 				=> __( 'Expected integer value for: %s', 'add-admin-css' ),
 			'Invalid file specified for C2C_Plugin: %s'
 				/* translators: %s: Path to the plugin file. */
@@ -431,6 +432,7 @@ HTML;
 
 		if ( defined( 'C2C_ADD_ADMIN_CSS_DISABLED' ) && C2C_ADD_ADMIN_CSS_DISABLED ) {
 			$msg = sprintf(
+				/* translators: %s: Name of a constant. */
 				__( "<strong>RECOVERY MODE ENABLED:</strong> CSS output for the Add Admin CSS plugin is currently disabled for the entire admin area via use of the <code>%s</code> constant.", 'add-admin-css' ),
 				'C2C_ADD_ADMIN_CSS_DISABLED'
 			);
