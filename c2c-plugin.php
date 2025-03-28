@@ -875,7 +875,11 @@ abstract class c2c_Plugin_067 {
 	 * @return array Links associated with a plugin on the admin Plugins page
 	 */
 	public function plugin_action_links( $action_links ) {
-		$settings_link = '<a href="' . esc_url( $this->form_action_url() ) . '">' . $this->get_c2c_string( 'Settings' ) . '</a>';
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( $this->form_action_url() ),
+			$this->get_c2c_string( 'Settings' )
+		);
 		array_unshift( $action_links, $settings_link );
 		return $action_links;
 	}

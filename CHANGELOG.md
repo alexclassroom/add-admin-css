@@ -12,6 +12,7 @@
 * Change: Update plugin framework to 067
     * 068:
     * Change: Ignore a PHPCS warning that doesn't apply
+    * Change: Minor code reformatting
     * Change: Note compatibility through WP 6.7+
     * Change: Update copyright date (2025)
     * Unit tests:
