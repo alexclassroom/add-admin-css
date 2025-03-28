@@ -212,7 +212,7 @@ Minor update: added HTML5 compliance when supported by the theme, modernized and
 Recommended update: added recovery mode, tweaked plugin initialization process, updated plugin framework, compatibility is now WP 4.7 through WP 5.1+, updated copyright date (2019), and more documentation and code improvements.
 
 = 1.6 =
-Recommended update: added code highlighting, syntax checking, etc as introduced elsewhere in WP 4.9; show admin notifications for settings page; updated plugin framework to version 046; verified compatibility through WP 4.9; dropped compatibility with versions of WordPress older than 4.6; updated copyright date (2018).
+Recommended update: added code highlighting and syntax checking as introduced in WP 4.9; show admin notifications for settings page; updated plugin framework to version 046; noted compatibility through WP 4.9; dropped compatibility with versions of WP older than 4.6; updated copyright date (2018).
 
 = 1.5 =
 Minor update: updated plugin framework to version 041; verified compatibility through WP 4.5.
