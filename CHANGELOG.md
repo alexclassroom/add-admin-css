@@ -68,6 +68,7 @@
     * New: Add test to check that the appropriate number of framework strings are translatable
     * Change: In bootstrap, add backcompat for PHPUnit pre-v6.0
     * Fix: Update tests to handle deprecation of core's `print_inline_script()`
+    * Change: Explicitly define return types for overridden methods
 * Change: Update copyright date (2025)
 * Change: Reduce number of tags defined in readme.txt
 

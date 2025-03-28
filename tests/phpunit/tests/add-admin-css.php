@@ -6,7 +6,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 	protected $obj;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$theme = wp_get_theme( 'twentyseventeen' );
@@ -15,7 +15,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->obj = c2c_AddAdminCSS::instance();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		unset( $GLOBALS['current_screen'] );
