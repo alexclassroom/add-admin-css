@@ -57,6 +57,7 @@
     * Fix: Fix URL for plugin listing donate link
     * Change: Store donation URL as object variable
     * Change: Update strings used for settings page donation link
+* Change: Ignore some PHPCS checks that don't apply
 * Change: Update and improve long description and numerous FAQ entries
 * Change: Note compatibility through WP 6.7+
 * Change: Drop compatibility with version of WP older than 5.5

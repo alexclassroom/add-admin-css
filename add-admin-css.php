@@ -364,6 +364,7 @@ final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 		);
 		$help .= '</p>';
 
+		// phpcs:ignore Squiz.PHP.Heredoc.NotAllowed -- This is purely a harcoded and formatted string.
 		$help .= <<<HTML
 <pre><code>function my_admin_css( \$css ) {
 	\$css .= "
@@ -383,6 +384,7 @@ HTML;
 		);
 		$help .= '</p>';
 
+		// phpcs:ignore Squiz.PHP.Heredoc.NotAllowed -- This is purely a harcoded and formatted string.
 		$help .= <<<HTML
 <pre><code>function my_admin_css_files( \$files ) {
 	\$files[] = 'http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css';
@@ -399,6 +401,7 @@ HTML;
 		);
 		$help .= '</p>';
 
+		// phpcs:ignore Squiz.PHP.Heredoc.NotAllowed -- This is purely a harcoded and formatted string.
 		$help .= <<<HTML
 <pre><code>function my_limit_add_admin_css_to_admins( \$disable ) {
 	// If the user isn't an admin, don't output the CSS from Add Admin CSS.
@@ -554,6 +557,7 @@ HTML;
 			$enabled = true;
 		}
 		// Recovery mode is enabled via query parameter and user can change settings.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Value is only used to enable recovery mode by users who can do so.
 		elseif ( isset( $_GET[ self::NO_CSS_QUERY_PARAM ] ) && '1' === $_GET[ self::NO_CSS_QUERY_PARAM ] && current_user_can( 'manage_options' ) ) {
 			$enabled = true;
 		}
