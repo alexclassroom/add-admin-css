@@ -2,7 +2,7 @@
 /**
  * @package C2C_Plugin
  * @author  Scott Reilly
- * @version 067
+ * @version 068
  */
 /*
 Basis for other plugins.
@@ -31,9 +31,9 @@ Compatible with WordPress 5.5 through 6.7+.
 
 defined( 'ABSPATH' ) or die();
 
-if ( ! class_exists( 'c2c_Plugin_067' ) ) :
+if ( ! class_exists( 'c2c_Plugin_068' ) ) :
 
-abstract class c2c_Plugin_067 {
+abstract class c2c_Plugin_068 {
 
 	/** @var string The name of the option used to store plugin's settings. */
 	public $admin_options_name = '';
@@ -133,7 +133,7 @@ abstract class c2c_Plugin_067 {
 	 * @since 040
 	 */
 	public function c2c_plugin_version() {
-		return '067';
+		return '068';
 	}
 
 	/**

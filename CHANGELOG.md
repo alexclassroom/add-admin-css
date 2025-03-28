@@ -13,7 +13,7 @@
 * Change: Add translator comments for a pair of strings with placeholders that didn't have one
 * Fix: Fix typo
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
-* Change: Update plugin framework to 067
+* Change: Update plugin framework to 068
     * 068:
     * Change: Ignore a PHPCS warning that doesn't apply
     * Change: Minor code reformatting

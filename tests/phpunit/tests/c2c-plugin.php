@@ -147,7 +147,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_Plugin_067' ) );
+		$this->assertTrue( class_exists( 'c2c_Plugin_068' ) );
 	}
 
 	/*
@@ -155,7 +155,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 	 */
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '067', $this->obj->c2c_plugin_version() );
+		$this->assertEquals( '068', $this->obj->c2c_plugin_version() );
 	}
 
 	/*
