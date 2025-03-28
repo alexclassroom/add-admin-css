@@ -12,6 +12,7 @@
 * Change: Update plugin framework to 067
     * 068:
     * Change: Note compatibility through WP 6.7+
+    * Change: Update copyright date (2025)
     * 067:
     * Breaking: Require config attribute 'input_attributes' to be an array
     * Hardening: Treat input attributes as array and escape each element before output
