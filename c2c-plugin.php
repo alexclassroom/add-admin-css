@@ -397,6 +397,7 @@ abstract class c2c_Plugin_067 {
 	 * Initializes options.
 	 */
 	public function init_options() {
+		// phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic -- sanitize_inputs() does indeed sanitize inputs
 		register_setting( $this->admin_options_name, $this->admin_options_name, array( $this, 'sanitize_inputs' ) );
 
 		add_settings_section( 'default', '', array( $this, 'options_page_description' ), $this->plugin_file );

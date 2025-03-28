@@ -11,6 +11,7 @@
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 067
     * 068:
+    * Change: Ignore a PHPCS warning that doesn't apply
     * Change: Note compatibility through WP 6.7+
     * Change: Update copyright date (2025)
     * Unit tests:
