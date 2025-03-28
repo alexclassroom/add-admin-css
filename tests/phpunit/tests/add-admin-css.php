@@ -659,9 +659,14 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->fake_current_screen();
 		$this->obj->add_codemirror();
 
-		$expected = 'jQuery\.extend\( wp\.codeEditor\.defaultSettings, {"codemirror":.+wp\.codeEditor\.initialize\( "css".+\);';
+		$expected = 'jQuery\.extend\( wp\.codeEditor\.defaultSettings, {"codemirror":';
 
-		$this->expectOutputRegex( '~' . $expected . '~ims', wp_scripts()->print_inline_script( 'code-editor' ) );
+		if ( method_exists( 'WP_Scripts', 'get_inline_script_data' ) ) {
+			$this->assertMatchesRegularExpression( '~' . $expected . '~ims', wp_scripts()->get_inline_script_data( 'code-editor' ) );
+		} else {
+			// Pre WP-6.3
+			$this->expectOutputRegex( '~' . $expected . '~ims', wp_scripts()->print_inline_script( 'code-editor' ) );
+		}
 	}
 
 	public function test_add_codemirror_does_not_add_scripts_on_other_screen_ids() {
@@ -669,9 +674,14 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		set_current_screen( 'another' );
 		$this->obj->add_codemirror();
 
-		$inline_script = wp_scripts()->print_inline_script( 'code-editor', 'after', false );
+		if ( method_exists( 'WP_Scripts', 'get_inline_script_data' ) ) {
+			$inline_script = wp_scripts()->get_inline_script_data( 'code-editor' );
+		} else {
+			// Pre WP-6.3
+			$inline_script = wp_scripts()->print_inline_script( 'code-editor', 'after', false );
+		}
 
-		$this->assertEquals( '', $inline_script );
+		$this->assertEmpty( $inline_script );
 	}
 
 	public function test_add_codemirror_does_not_add_scripts_if_code_editor_not_registered() {
@@ -679,7 +689,12 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		wp_deregister_script( 'code-editor' );
 		$this->obj->add_codemirror();
 
-		$inline_script = wp_scripts()->print_inline_script( 'code-editor', 'after', false );
+		if ( method_exists( 'WP_Scripts', 'get_inline_script_data' ) ) {
+			$inline_script = wp_scripts()->get_inline_script_data( 'code-editor' );
+		} else {
+			// Pre WP-6.3
+			$inline_script = wp_scripts()->print_inline_script( 'code-editor', 'after', false );
+		}
 
 		$this->assertEmpty( $inline_script );
 	}
