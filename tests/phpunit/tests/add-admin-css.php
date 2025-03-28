@@ -171,7 +171,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	public function test_css_added_via_filter_not_added_to_wp_head() {
 		add_filter( 'c2c_add_admin_css', array( $this, 'add_css' ) );
 
-		$this->assertNotContains( $this->add_css( '' ), $this->get_action_output( 'wp_head' ) );
+		$this->assertStringNotContainsString( $this->add_css( '' ), $this->get_action_output( 'wp_head' ) );
 	}
 
 	/**
@@ -180,7 +180,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 	public function test_css_files_added_via_filter_not_added_to_wp_head( $link ) {
 		add_filter( 'c2c_add_admin_css_files', array( $this, 'add_css_files' ) );
 
-		$this->assertNotContains( $link, $this->get_action_output( 'wp_head' ) );
+		$this->assertStringNotContainsString( $link, $this->get_action_output( 'wp_head' ) );
 	}
 
 	public function test_class_name() {
@@ -287,28 +287,28 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->set_option();
 		$this->test_turn_on_admin();
 
-		$this->assertContains( $link, $this->get_action_output() );
+		$this->assertStringContainsString( $link, $this->get_action_output() );
 	}
 
 	public function test_ver_query_arg_added_for_links() {
 		$this->set_option();
 		$this->test_turn_on_admin();
 
-		$this->assertContains( 'http://test.example.org/css/sample.css?ver=' . $this->obj->version(), $this->get_action_output() );
+		$this->assertStringContainsString( 'http://test.example.org/css/sample.css?ver=' . $this->obj->version(), $this->get_action_output() );
 	}
 
 	public function test_ver_query_arg_added_for_relative_links() {
 		$this->set_option();
 		$this->test_turn_on_admin();
 
-		$this->assertContains( '/css/site-relative.css?ver=' . $this->obj->version(), $this->get_action_output() );
+		$this->assertStringContainsString( '/css/site-relative.css?ver=' . $this->obj->version(), $this->get_action_output() );
 	}
 
 	public function test_ver_query_arg_not_added_if_link_already_has_it() {
 		$this->set_option();
 		$this->test_turn_on_admin();
 
-		$this->assertContains( "'https://maxcdn.example.com/font-awesome/4.4.0/css/font-awesome.min.css?ver=4.4.0'", $this->get_action_output() );
+		$this->assertStringContainsString( "'https://maxcdn.example.com/font-awesome/4.4.0/css/font-awesome.min.css?ver=4.4.0'", $this->get_action_output() );
 	}
 
 	/**
@@ -322,8 +322,8 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		$output = $this->get_action_output();
 
-		$this->assertContains( "<link rel='stylesheet'", $output );
-		$this->assertContains( $link, $output );
+		$this->assertStringContainsString( "<link rel='stylesheet'", $output );
+		$this->assertStringContainsString( $link, $output );
 	}
 
 	public function test_empty_array_via_filter_does_not_add_link() {
@@ -332,7 +332,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		$this->test_turn_on_admin();
 
-		$this->assertNotContains( "<link rel='stylesheet'", $this->get_action_output() );
+		$this->assertStringNotContainsString( "<link rel='stylesheet'", $this->get_action_output() );
 	}
 
 	public function test_css_is_added_to_admin_head() {
@@ -341,8 +341,8 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		$output = $this->get_action_output();
 
-		$this->assertContains( '<style>', $output );
-		$this->assertContains( $this->add_css( '', '22' ), $output );
+		$this->assertStringContainsString( '<style>', $output );
+		$this->assertStringContainsString( $this->add_css( '', '22' ), $output );
 	}
 
 	public function test_css_added_via_filter_is_added_to_admin_head() {
@@ -353,8 +353,8 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		$output = $this->get_action_output();
 
-		$this->assertContains( '<style>', $output );
-		$this->assertContains( $this->add_css( '' ), $output );
+		$this->assertStringContainsString( '<style>', $output );
+		$this->assertStringContainsString( $this->add_css( '' ), $output );
 	}
 
 	public function test_empty_string_via_filter_does_not_add_css() {
@@ -363,7 +363,7 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 
 		add_filter( 'c2c_add_admin_css', '__return_empty_string' );
 
-		$this->assertNotContains( '<style>', $this->get_action_output() );
+		$this->assertStringNotContainsString( '<style>', $this->get_action_output() );
 	}
 
 	public function test_add_css_to_head_with_just_css( $expected = false ) {
