@@ -9,6 +9,7 @@
 * Change: Explicitly state the plugin name in the recovery mode admin notice to avoid ambiguity
 * Change: Switch use of `parse_url()` to `wp_parse_url()`
 * Change: Escape output of all translated strings
+* Change: Convert 'input_attributes' value of config items from a string to an array
 * Change: Add translator comments for a pair of strings with placeholders that didn't have one
 * Fix: Fix typo
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
