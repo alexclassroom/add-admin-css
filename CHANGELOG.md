@@ -10,6 +10,8 @@
 * Change: Switch use of `parse_url()` to `wp_parse_url()`
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 067
+    * 068:
+    * Change: Note compatibility through WP 6.7+
     * 067:
     * Breaking: Require config attribute 'input_attributes' to be an array
     * Hardening: Treat input attributes as array and escape each element before output
