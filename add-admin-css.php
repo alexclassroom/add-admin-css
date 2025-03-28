@@ -155,7 +155,7 @@ final class c2c_AddAdminCSS extends c2c_Plugin_067 {
 						. __( 'Full, absolute URL (e.g. <code>https://example.com/js/custom.js</code>)', 'add-admin-css' )
 						. '</li></ul>'
 					. '</li><li>'
-					. __ ('Files will be output in the order listed above and appear before the CSS defined below.', 'add-admin-css' )
+					. __( 'Files will be output in the order listed above and appear before the CSS defined below.', 'add-admin-css' )
 					. '</li></ul>',
 				'input_attributes' => [
 					'rows' => 4,
