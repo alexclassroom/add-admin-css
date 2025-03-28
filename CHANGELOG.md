@@ -73,6 +73,7 @@
     * Change: Use `assertStringContainsString()` instead of `assertContains()`
 * Change: Update copyright date (2025)
 * Change: Reduce number of tags defined in readme.txt
+* Change: Remove development and testing related files from release packaging
 
 ## 2.0.1 _(2021-05-30)_
 
