@@ -13,6 +13,9 @@
     * 068:
     * Change: Note compatibility through WP 6.7+
     * Change: Update copyright date (2025)
+    * Unit tests:
+        * Change: Define method return types for PHP 8+ compatibility
+        * New: Add some header documentation
     * 067:
     * Breaking: Require config attribute 'input_attributes' to be an array
     * Hardening: Treat input attributes as array and escape each element before output

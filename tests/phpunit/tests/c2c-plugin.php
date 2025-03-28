@@ -1,5 +1,22 @@
 <?php
-
+/**
+ * Unit tests for the c2c_Plugin framework.
+ *
+ * Minimum changes for a change in c2c_Plugin framework version:
+ * - In `test_plugin_framework_class_name()`, update framework version
+ * - In `test_plugin_framework_version()`, update framework version
+ *
+ * Plugin-specific elements that must be customized per the plugin this is run under:
+ * - In `setup()`:
+ *   - Customize gettext filter name to reflect plugin's nicename
+ *   - Use appropriate class name and instance getter method name to get object instance
+ * - In `test_get_c2c_string_has_correct_number_of_strings()`:
+ *   - Use appropriate *_PLUGIN_FILE constant
+ * - In `test_get_hook()`:
+ *   - Customize gettext filter name to reflect plugin's nicename
+ * - In `test_display_option_short_text_field()`:
+ *   - Customize 'name' attribute to use snake-cased plugin name
+ */
 defined( 'ABSPATH' ) or die();
 
 class c2c_Plugin extends WP_UnitTestCase {
