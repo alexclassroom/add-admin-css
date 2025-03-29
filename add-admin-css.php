@@ -334,7 +334,7 @@ final class c2c_AddAdminCSS extends c2c_Plugin_068 {
 		$screen->add_help_tab( array(
 			'id'      => 'c2c-advanced-tips-' . $this->id_base,
 			'title'   => __( 'Advanced Tips', 'add-admin-css' ),
-			'content' => self::contextual_help( '', $this->options_page )
+			'content' => $this->contextual_help( '', $this->options_page )
 		) );
 
 		parent::help_tabs_content( $screen );
