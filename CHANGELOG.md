@@ -17,7 +17,7 @@
     * 068:
     * Change: Ignore a PHPCS warning that doesn't apply
     * Change: Minor code reformatting
-    * Change: Note compatibility through WP 6.7+
+    * Change: Note compatibility through WP 6.8+
     * Change: Update copyright date (2025)
     * Unit tests:
         * Change: Define method return types for PHP 8+ compatibility
@@ -60,7 +60,7 @@
     * Change: Update strings used for settings page donation link
 * Change: Ignore some PHPCS checks that don't apply
 * Change: Update and improve long description and numerous FAQ entries
-* Change: Note compatibility through WP 6.7+
+* Change: Note compatibility through WP 6.8+
 * Change: Drop compatibility with version of WP older than 5.5
 * Change: Tweak installation instruction
 * New: Add `.gitignore` file
