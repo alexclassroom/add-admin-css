@@ -15,6 +15,7 @@
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 068
     * 068:
+    * Change: Discontinue unnecessary explicit loading of textdomain
     * Change: Ignore a PHPCS warning that doesn't apply
     * Change: Minor code reformatting
     * Change: Note compatibility through WP 6.8+

@@ -246,7 +246,6 @@ abstract class c2c_Plugin_068 {
 			$c2c_plugin_max_css_version = $this->plugin_css_version;
 		}
 
-		$this->load_textdomain();
 		$this->load_config();
 		$this->verify_config();
 
@@ -705,13 +704,6 @@ abstract class c2c_Plugin_068 {
 			}
 		}
 		$this->reset_caches();
-	}
-
-	/**
-	 * Loads the localization textdomain for the plugin.
-	 */
-	protected function load_textdomain() {
-		load_plugin_textdomain( $this->id_base );
 	}
 
 	/**
