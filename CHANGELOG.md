@@ -22,6 +22,7 @@
     * Change: Note compatibility through WP 6.8+
     * Change: Update copyright date (2025)
     * Unit tests:
+        * Change: Generify unit tests to centralize per-plugin configuration to the top of the test class
         * Change: Define method return types for PHP 8+ compatibility
         * New: Add some header documentation
     * 067:

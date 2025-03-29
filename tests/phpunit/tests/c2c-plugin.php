@@ -2,26 +2,22 @@
 /**
  * Unit tests for the c2c_Plugin framework.
  *
- * Minimum changes for a change in c2c_Plugin framework version:
- * - In `test_plugin_framework_class_name()`, update framework version
- * - In `test_plugin_framework_version()`, update framework version
- *
- * Plugin-specific elements that must be customized per the plugin this is run under:
- * - In `setup()`:
- *   - Customize gettext filter name to reflect plugin's nicename
- *   - Use appropriate class name and instance getter method name to get object instance
- * - In `test_get_c2c_string_has_correct_number_of_strings()`:
- *   - Use appropriate *_PLUGIN_FILE constant
- * - In `test_get_hook()`:
- *   - Customize gettext filter name to reflect plugin's nicename
- * - In `test_display_option_short_text_field()`:
- *   - Customize 'name' attribute to use snake-cased plugin name
+ * Use: Customize the instance variables found grouped together at the top of the test class.
  */
 defined( 'ABSPATH' ) or die();
 
 class c2c_Plugin extends WP_UnitTestCase {
 
+	/* These values need to be customized for any c2c_Plugin-based plugin. */
+	protected $class           = 'c2c_AddAdminCSS';
+	protected $file            = ADD_ADMIN_CSS_PLUGIN_FILE;
+	protected $slug            = 'add-admin-css';
+	protected $underscore_slug = 'add_admin_css';
+	protected $framework_ver   = '068';
+
+	// Configured on instantiation.
 	protected $obj;
+	protected $dir             = '';
 
 	protected static $example_option = [
 		'input'    => 'short_text',
@@ -35,8 +31,10 @@ class c2c_Plugin extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 
-		add_filter( 'gettext_add-admin-css', array( $this, 'translate_text' ), 10, 2 );
-		$this->obj = c2c_AddAdminCSS::instance();
+		$this->dir = dirname( $this->file );
+
+		add_filter( 'gettext_' . $this->slug, array( $this, 'translate_text' ), 10, 2 );
+		$this->obj = method_exists( $this->class, 'get_instance' ) ? $this->class::get_instance() : $this->class::instance();
 	}
 
 	public function tearDown(): void {
@@ -147,7 +145,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 
 
 	public function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'c2c_Plugin_068' ) );
+		$this->assertTrue( class_exists( 'c2c_Plugin_' . $this->framework_ver ) );
 	}
 
 	/*
@@ -155,7 +153,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 	 */
 
 	public function test_plugin_framework_version() {
-		$this->assertEquals( '068', $this->obj->c2c_plugin_version() );
+		$this->assertEquals( $this->framework_ver, $this->obj->c2c_plugin_version() );
 	}
 
 	/*
@@ -214,7 +212,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 	 */
 	public function test_get_c2c_string_has_correct_number_of_strings() {
 		$this->assertEquals(
-			$this->count_function_calls( dirname( ADD_ADMIN_CSS_PLUGIN_FILE ) . '/c2c-plugin.php', 'get_c2c_string' ),
+			$this->count_function_calls( $this->dir . '/c2c-plugin.php', 'get_c2c_string' ),
 			count( $this->obj->get_c2c_string() )
 		);
 	}
@@ -278,7 +276,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 	 */
 
 	public function test_get_hook() {
-		$this->assertEquals( 'add_admin_css__example-hook', $this->obj->get_hook( 'example-hook' ) );
+		$this->assertEquals( $this->underscore_slug . '__example-hook', $this->obj->get_hook( 'example-hook' ) );
 	}
 
 	/*
@@ -340,7 +338,7 @@ class c2c_Plugin extends WP_UnitTestCase {
 			'input_attributes' => [],
 		] );
 
-		$expected = '<input type="text" class="c2c-short_text small-text" id="shorttextfield" name="c2c_add_admin_css[shorttextfield]" value="25" />'
+		$expected = '<input type="text" class="c2c-short_text small-text" id="shorttextfield" name="c2c_' . $this->underscore_slug . '[shorttextfield]" value="25" />'
 			. "\n"
 			. '<p class="description">This is help.</p>'
 			. "\n";
