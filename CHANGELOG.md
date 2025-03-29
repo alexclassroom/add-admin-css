@@ -61,6 +61,7 @@
 * Change: Ignore some PHPCS checks that don't apply
 * Change: Update and improve long description and numerous FAQ entries
 * Change: Note compatibility through WP 6.8+
+* Change: Note compatibility through PHP 8.3+
 * Change: Drop compatibility with version of WP older than 5.5
 * Change: Tweak installation instruction
 * New: Add `.gitignore` file

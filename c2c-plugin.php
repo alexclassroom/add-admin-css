@@ -7,7 +7,7 @@
 /*
 Basis for other plugins.
 
-Compatible with WordPress 5.5 through 6.8+.
+Compatible with WordPress 5.5 through 6.8+, and PHP through at leaset 8.3+.
 
 */
 
