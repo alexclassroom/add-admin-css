@@ -280,6 +280,70 @@ class Add_Admin_CSS_Test extends WP_UnitTestCase {
 		$this->expectOutputRegex( '~^' . preg_quote( $expected ) . '$~', $this->obj->options_page_description() );
 	}
 
+	/*
+	 * help_tabs_content()
+	 */
+
+	 public function test_help_tabs_content_adds_advanced_tips_help_tab() {
+		// Create a dummy screen with an add_help_tab() method.
+		$screen = new class {
+			public $help_tabs = [];
+			public function add_help_tab( $args ) {
+				$this->help_tabs[] = $args;
+			}
+		};
+
+		$this->obj->id_base      = 'my_id_base';
+		$this->obj->options_page = 'my_options_slug';
+
+		$this->obj->help_tabs_content( $screen );
+
+		$this->assertNotEmpty( $screen->help_tabs, 'No help tabs were added.' );
+
+		$tab = $screen->help_tabs[0];
+
+		$this->assertArrayHasKey( 'id', $tab );
+		$this->assertSame(
+			'c2c-advanced-tips-my_id_base',
+			$tab['id'],
+			'Help‐tab ID did not match expected pattern.'
+		);
+
+		$this->assertArrayHasKey( 'title', $tab );
+		$this->assertSame(
+			'Advanced Tips',
+			$tab['title'],
+			'Help‐tab title should be "Advanced Tips".'
+		);
+	}
+
+	public function test_help_tabs_content_uses_contextual_help_for_content() {
+		// Create a dummy screen with an add_help_tab() method.
+		$screen = new class {
+			public $help_tabs = [];
+			public function add_help_tab( $args ) {
+				$this->help_tabs[] = $args;
+			}
+		};
+
+		$this->obj->id_base      = 'foo';
+		$this->obj->options_page = 'bar_options';
+
+		$expected_content = $this->obj->contextual_help( '', 'bar_options' );
+
+		$this->obj->help_tabs_content( $screen );
+
+		$this->assertNotEmpty( $screen->help_tabs, 'No help tabs were added.' );
+		$tab = $screen->help_tabs[0];
+
+		$this->assertArrayHasKey( 'content', $tab );
+		$this->assertSame(
+			$expected_content,
+			$tab['content'],
+			'Help‐tab content should be generated via contextual_help().'
+		);
+	}
+
 	/**
 	 * @dataProvider get_css_file_links
 	 */
