@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.5
 Tested up to: 6.8
-Stable tag: 2.0.1
+Stable tag: 2.5
 
 Easily define additional CSS (inline and/or by URL) to be added to all administration pages.
 
@@ -94,6 +94,82 @@ As an overview, these are the hooks provided by the plugin:
 
 == Changelog ==
 
+= 2.5 (2025-03-29) =
+Highlights:
+
+This recommended long overdue release adds a new filter for fine-grained control of whether CSS should be output or not, updates the plugin framework to the most current version (for hardening and miscellaneous improvements), prevents translations from containing unintended markup, notes compatibility through WP 6.8+ and PHP 8.3+, drops compatibility with versions of WP older than 5.5, adds DEVELOPER-DOCS.md, and removes unit tests from release packaging, and more.
+
+Details:
+
+* New: Add `c2c_add_admin_css_disable_css` filter to override if CSS defined via this plugin should be output or not
+* New: Add `is_recovery_mode_enabled()` to determine is recovery mode is enabled
+* Change: Only support query parameter method of enabling recovery mode if current user can configure plugin settings
+* Change: Display the files setting help text as a list rather than a paragraph
+* Change: Check specifically if recovery mode is enabled before displaying admin notice that recovery mode is enabled
+* Change: Explicitly state the plugin name in the recovery mode admin notice to avoid ambiguity
+* Change: Switch use of `parse_url()` to `wp_parse_url()`
+* Change: Escape output of all translated strings
+* Change: Use instance method invocation instead of a deprecated static method invocation
+* Change: Convert 'input_attributes' value of config items from a string to an array
+* Change: Add translator comments for a pair of strings with placeholders that didn't have one
+* New: Add DEVELOPER-DOCS.md and move hooks documentation into it
+* Change: Update plugin framework to 068
+    * 068:
+    * Change: Discontinue unnecessary explicit loading of textdomain
+    * Change: Ignore a PHPCS warning that doesn't apply
+    * Change: Minor code reformatting
+    * Change: Note compatibility through WP 6.8+
+    * Change: Update copyright date (2025)
+    * Unit tests:
+        * Change: Generify unit tests to centralize per-plugin configuration to the top of the test class
+        * Change: Define method return types for PHP 8+ compatibility
+        * New: Add some header documentation
+    * 067:
+    * Breaking: Require config attribute 'input_attributes' to be an array
+    * Hardening: Treat input attributes as array and escape each element before output
+    * Change: Ensure config attribute values are of the same datatype as their defaults
+    * Change: Simplify `form_action_url()` to avoid using a server global
+    * Change: Use `form_action_url()` in `plugin_action_links()` rather than duplicating its functionality
+    * Change: Escape output of all translated strings
+    * Change: Make `get_hook()` public rather than protected
+    * Change: Explicitly declare object variables rather than doing so dynamically
+    * Change: Convert `register_filters()` to an abstract declaration
+    * Change: Use double quotes for attribute of paragraph for setting description
+    * Change: Prevent unwarranted PHPCS complaints about nonces
+    * Change: Improve function documentation
+    * Change: Adjust function documentation formatting to align with WP core
+    * Change: Note compatibility through WP 6.5+
+    * Change: Drop compatibility with version of WP older than 5.5
+    * Change: Update copyright date (2024)
+    * 066:
+    * New: Add customization of capability needed to manage plugin settings (via new filter {plugin_prefix}_manage_options_capability)
+    * Change: Add styles for nested lists within settings descriptions
+    * Change: Note compatibility through WP 6.3+
+    * 065:
+    * New: Add support for 'inline_help' setting configuration option
+    * New: Add support for 'raw_help' setting configuration option
+    * New: Add support for use of lists within settings descriptions
+    * Change: Add an 'id' attribute to settings form
+    * Change: Add styles for disabled input text fields and inline setting help notices
+    * Change: Support 'number' input by assigning 'small-text' class
+    * Change: Tweak styling for settings page footer
+    * Change: Note compatibility through WP 6.2+
+    * Change: Update copyright date (2023)
+    * 064:
+    * New: For checkbox settings, support a 'more_help' config option for defining help text to appear below checkbox and its label
+    * Fix: Fix URL for plugin listing donate link
+    * Change: Store donation URL as object variable
+    * Change: Update strings used for settings page donation link
+* Change: Ignore some PHPCS checks that don't apply
+* Change: Update and improve long description and numerous FAQ entries
+* Change: Note compatibility through WP 6.8+
+* Change: Note compatibility through PHP 8.3+
+* Change: Drop compatibility with version of WP older than 5.5
+* Change: Tweak installation instruction
+* Change: Update copyright date (2025)
+* Change: Reduce number of tags defined in readme.txt
+* Change: Remove development and testing related files from release packaging
+
 = 2.0.1 (2021-05-30) =
 Highlights:
 
@@ -173,25 +249,13 @@ Details:
     * Change: Remove 'test-' prefix from unit test files
     * Change: In bootstrap, store path to plugin file constant so its value can be used within that file and in test file
 
-= 1.9.1 (2020-09-25) =
-* Change: Update plugin framework to 051
-    * Allow setting integer input value to include commas
-    * Use `number_format_i18n()` to format integer value within input field
-    * Update link to coffee2code.com to be HTTPS
-    * Update `readme_url()` to refer to plugin's readme.txt on plugins.svn.wordpress.org
-    * Remove defunct line of code
-* Change: Note compatibility through WP 5.5+
-* Change: Restructure unit test file structure
-    * New: Create new subdirectory `phpunit/` to house all files related to unit testing
-    * Change: Move `bin/` to `phpunit/bin/`
-    * Change: Move `tests/bootstrap.php` to `phpunit/`
-    * Change: Move `tests/` to `phpunit/tests/`
-    * Change: Rename `phpunit.xml` to `phpunit.xml.dist` per best practices
-
 _Full changelog is available in [CHANGELOG.md](https://github.com/coffee2code/add-admin-css/blob/master/CHANGELOG.md)._
 
 
 == Upgrade Notice ==
+
+= 2.5 =
+Recommended update: added filter to control if CSS is output, updated plugin framework (hardening & improvements), prevented unintended markup in translations, noted compatibility through WP 6.8+, dropped compatibility with WP older than 5.5, and removed unit tests from release packaging.
 
 = 2.0.1 =
 Recommended bugfix release: Addressed potential conflict with other plugins that prevented plugin settings page main content from being displayed.

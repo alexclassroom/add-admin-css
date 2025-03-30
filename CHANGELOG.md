@@ -1,6 +1,13 @@
 # Changelog
 
-## _(in-progress)_
+## 2.5 _(2025-03-29)_
+
+### Highlights:
+
+This recommended long overdue release adds a new filter for fine-grained control of whether CSS should be output or not, updates the plugin framework to the most current version (for hardening and miscellaneous improvements), prevents translations from containing unintended markup, notes compatibility through WP 6.8+ and PHP 8.3+, drops compatibility with versions of WP older than 5.5, adds DEVELOPER-DOCS.md, and removes unit tests from release packaging, and more.
+
+### Details:
+
 * New: Add `c2c_add_admin_css_disable_css` filter to override if CSS defined via this plugin should be output or not
 * New: Add `is_recovery_mode_enabled()` to determine is recovery mode is enabled
 * Change: Only support query parameter method of enabling recovery mode if current user can configure plugin settings
@@ -12,7 +19,6 @@
 * Change: Use instance method invocation instead of a deprecated static method invocation
 * Change: Convert 'input_attributes' value of config items from a string to an array
 * Change: Add translator comments for a pair of strings with placeholders that didn't have one
-* Fix: Fix typo
 * New: Add DEVELOPER-DOCS.md and move hooks documentation into it
 * Change: Update plugin framework to 068
     * 068:
